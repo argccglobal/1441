@@ -262,16 +262,26 @@ export const Footer: React.FC<FooterProps> = ({
     },
   ];
   return (
-    <div className="relative border-t bg-[#222222] ">
+    <div className=" relative">
       {isVisible === true && (
         <div
           onClick={scrollToTop}
-          className="fixed z-50 bg-[#1C1C1CE5] right-[28px] flex items-center justify-center cursor-pointer bottom-[18px] h-[34px] w-[34px]  rounded-sm"
+          className="fixed z-50 bg-[#D2FBFB] right-[28px] flex items-center justify-center cursor-pointer bottom-[18px] h-[40px] w-[40px]  rounded-sm"
         >
-          <Icon name="north" className="!text-white text-h4 " />
+          <Icon name="north" className=" text-[20px] text-neutralDark " />
         </div>
       )}
-      <div className="bg-black py-[60px] relative">
+      <div className="h-[10px] flex">
+        <div className="w-1/4 h-full bg-properties"></div>
+        <div className="w-1/4 h-full bg-team"></div>
+        <div className="w-1/4 h-full bg-contact"></div>
+        <div className="w-1/4 h-full bg-services"></div>
+        <div className="w-1/4 h-full bg-properties"></div>
+        <div className="w-1/4 h-full bg-team"></div>
+        <div className="w-1/4 h-full bg-contact"></div>
+        <div className="w-1/4 h-full bg-services"></div>
+      </div>
+      <div className="bg-[#222222] py-20 relative">
         <div className="container">
           <div className="flex flex-col gap-12">
             <div className="flex flex-col gap-8">
@@ -290,7 +300,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </Text>
                 <div className="flex gap-20 justify-between items-start">
                   {footerMenu.map((item, index) => (
-                    <div className="flex flex-col gap-8">
+                    <div key={index} className="flex flex-col gap-8">
                       <Text
                         variant={"footer_menu_title"}
                         className="text-white"
@@ -299,7 +309,7 @@ export const Footer: React.FC<FooterProps> = ({
                       </Text>
                       <div className="flex flex-col gap-5">
                         {item.links.map((link, index) => (
-                          <Link href={link.href}>
+                          <Link key={index} href={link.href}>
                             <Text variant={"button"} className="text-white">
                               {link.title}
                             </Text>

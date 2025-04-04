@@ -146,6 +146,8 @@ module.exports = {
         placeholder: "#ACABAC",
 
         properties: "#88F1F2",
+        propertiesMain: "#139AA7",
+
         team: "#00CFE6",
         services: "#A082FF",
         contact: "#7F69FF",

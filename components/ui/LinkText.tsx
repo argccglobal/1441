@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Text } from "./Text";
+import { Text, textVariants } from "./Text";
 import Link from "next/link";
 import { Icon } from "./Icon";
 import { cn } from "@/utils/classNames";
@@ -37,13 +37,13 @@ export const LinkText = ({
 }: LinkTextProps) => {
   noUnderline = icon ? true : false;
   const iconSize = "text-base";
-  const linkStyle = " text-neutralDark hover:text-productLicensing-700";
+  const linkStyle = " text-neutralDark ";
   return type == "link" ? (
     <Link
       target={target}
       onClick={onClick}
       className={cn(
-        "group/link uppercase flex items-center gap-2.5 leading-none transition duration-300 text-body_2 font-normal",
+        "group/link  flex items-center gap-2.5 leading-none transition duration-300 text-body_2 font-normal",
         linkStyle,
         className
       )}
@@ -54,11 +54,11 @@ export const LinkText = ({
         <Icon className={iconSize} name={icon} />
       )}
       <span
-        className={` text-${textColor} ${
-          noUnderline === true
-            ? "no-underline"
-            : "underline underline-offset-2 group-hover/link:underline"
-        }  text-body_2`}
+        className={cn(
+          textVariants({
+            variant: "button",
+          })
+        )}
       >
         {label}
       </span>
@@ -83,11 +83,9 @@ export const LinkText = ({
       )}
       <span
         className={cn(
-          "!text-" + textColor,
-          "text-body_2 underline-offset-2",
-          noUnderline == true
-            ? "no-underline"
-            : "underline group-hover/text:underline"
+          textVariants({
+            variant: "button",
+          })
         )}
       >
         {label}

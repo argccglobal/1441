@@ -58,7 +58,7 @@ export const CheckboxInput = React.forwardRef<HTMLInputElement, InputProps>(
             htmlFor={id}
           >
             <Icon
-              className="overflow-hidden text-[20px]"
+              className="overflow-hidden text-primary text-[20px]"
               name="checked"
               onClick={() => setChecked(!checked)}
             />

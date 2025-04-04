@@ -1,426 +1,285 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Text, textVariants } from "./Text";
+import { cn } from "@/utils/classNames";
 import { Icon } from "./Icon";
-import { SmallHeading, Text } from "./Text";
 import { CheckboxInput } from "./Checkbox";
-import { cn } from "../../lib/utils";
-import { on } from "events";
-import { string } from "zod";
-import { ToolTip } from "./ToolTip";
-import { EnglishSpeakingToolTip } from "@/app/(apply)/pre-application-details/EnglishSpeakingToolTip";
-import { relative } from "path";
-export interface Options {
-  [key: string]: any | string | number | boolean | null | undefined;
+
+export interface SelectOption {
+  [key: string]: any;
+  label: string;
+  value: string | number;
+  tag?: string;
 }
 
-interface SelectProps extends React.HTMLAttributes<HTMLSelectElement> {
-  refName?: any;
-  options: Options[];
-  error?: boolean;
-  errorMsg?: string;
-  disabled?: boolean;
-  selectedItem?: Options;
-  search?: boolean;
-  placeholder: string;
-  placeholderClass?: string;
-  className?: string;
-  multicol?: boolean;
-  col?: number;
-  optionType?: string | "checkbox";
-  dark?: boolean;
-  labelKey: string;
-  valueKey: string;
+interface SearchSelectProps {
+  name: string;
+  options: SelectOption[];
   label?: string;
-  selectValue?: string;
-  gap?: string;
-  reset?: boolean;
-  toolTipText?: string;
-  handleSelect?: () => void;
-  ref_key?: any;
-  relative?: boolean;
-  tabIndexValue?: any;
-  withoutIcon?: boolean;
+  placeholder?: string;
+  error?: boolean;
+  errorMessage?: string;
+  disabled?: boolean;
+  value?: SelectOption;
+  className?: string;
+  dark?: boolean;
+  isMulti?: boolean;
+  isSearchable?: boolean;
+  required?: boolean;
+  tooltipText?: string;
+  onChange?: (value: SelectOption | SelectOption[] | null) => void;
+  onBlur?: () => void;
+  control?: any; // For react-hook-form integration
 }
-const SearchSelect = ({
-  refName,
-  toolTipText,
+
+const SearchSelect: React.FC<SearchSelectProps> = ({
+  name,
   options,
-  error,
-  errorMsg,
-  selectedItem,
-  ref_key,
-  className,
-  search,
-  placeholder,
-  placeholderClass,
   label,
-  multicol,
-  optionType = "string",
-  col,
-  dark,
-  handleSelect,
-  labelKey,
-  valueKey,
+  placeholder = "Select",
+  error,
+  errorMessage,
   disabled,
-  reset,
-  relative,
-  tabIndexValue,
-  withoutIcon = false,
-  ...props
-}: SelectProps) => {
-  // const [countries, setCountries] = useState(null);
+  value,
+  className,
+  dark,
+  isMulti,
+  isSearchable = true,
+  required,
+  tooltipText,
+  onChange,
+  onBlur,
+  control,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const [selected, setSelected] = useState<any>({
-    labelKey,
-    valueKey,
-  });
-  const [inputValue, setInputValue] = useState(selected[labelKey]);
-  // useEffect(() => {
-  //   setInputValue(selected[labelKey]);
-  // }, [selected]);
-  const [open, setOpen] = useState(false);
+  // Initialize selectedOptions with value prop if provided
   useEffect(() => {
-    const handleOutsideClick = (event: any) => {
-      if (open && !event.target.closest(".option-menu")) {
-        setOpen(false);
+    if (value) {
+      setSelectedOptions(
+        isMulti ? (Array.isArray(value) ? value : [value]) : [value]
+      );
+    }
+  }, [value, isMulti]);
+
+  // Update selected options when value prop changes
+  useEffect(() => {
+    if (value === null || value === undefined) {
+      setSelectedOptions([]);
+    } else if (value !== selectedOptions[0]) {
+      setSelectedOptions(
+        isMulti ? (Array.isArray(value) ? value : [value]) : [value]
+      );
+    }
+  }, [value, isMulti]);
+
+  // Handle outside clicks
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [open, setOpen]);
-  // col = options.length > 20 ? 3 : options.length > 10 ? 2 : 1;
-  const classes = ["w-[203%]", "w-[300%]"];
-  const [selectedOption, setSelectedOption] = useState<Options[]>([]);
-  const handleSelectOption = (option: Options, type?: any) => {
-    console.log("option test", option);
-    if (handleSelect) {
-      // @ts-ignore
-      const selectOption = handleSelect();
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-      if (optionType != "checkbox") {
-        console.log("selectOption", option);
-        // @ts-ignore
-        selectOption(option);
-        selectedItem = option;
-      } else {
-        console.log(disabled);
+  // Filter options based on search
+  const filteredOptions = options.filter((option) =>
+    option.label.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
-        // @ts-ignore
-        selectOption(option, type, ref_key);
-        selectedItem = option;
-      }
-      // @ts-ignore
-    }
-    setSelected({
-      ...option,
-      label: option[labelKey],
-      value: option[valueKey],
-    });
-    console.log("labelKey input", option[labelKey]);
-    setInputValue("");
+  const handleSelect = (option: SelectOption) => {
+    let newSelection: SelectOption[];
 
-    // Reset the selection if required
-    if (reset) {
-      setSelected({});
+    if (isMulti) {
+      newSelection = selectedOptions.includes(option)
+        ? selectedOptions.filter((item) => item !== option)
+        : [...selectedOptions, option];
+    } else {
+      newSelection = [option];
     }
 
-    // Close the dropdown and clear input for non-checkbox
-    if (optionType !== "checkbox") {
-      setOpen(false);
-      // setInputValue("");
+    setSelectedOptions(newSelection);
+    onChange?.(isMulti ? newSelection : option);
+
+    if (!isMulti) {
+      setIsOpen(false);
     }
+    setSearchValue("");
   };
 
-  useEffect(() => {
-    // @ts-ignore
-    if (selectedItem == "reset") {
-      setSelected({});
-    }
-    if (selectedItem) {
-      setSelected({
-        ...selectedItem,
-        label: selectedItem[labelKey],
-        // @ts-ignore
-        value: selectedItem[valueKey],
-      });
-    }
-  }, [selectedItem, labelKey, valueKey]);
-  const focusRef = useRef<HTMLInputElement>(null);
-  const focusSearchInput = () => {
-    const searchInput = true;
-    const menuList = document.querySelector(".option-menu");
-    if (focusRef && focusRef.current) {
-      console.log("searchInput", focusRef);
-      focusRef.current.focus();
-      menuList?.scrollTo(0, 0);
-    }
+  const renderValue = () => {
+    if (selectedOptions.length === 0) return placeholder;
+    if (!isMulti) return selectedOptions[0].label;
+    return `${selectedOptions.length} selected`;
   };
 
-  return (
-    <>
-      {label && (
-        <SmallHeading
-          onClick={() => {
-            setOpen(!open);
-            focusSearchInput();
-          }}
-          className="!mb-2.5 flex items-center gap-2.5 "
-          color={dark ? "white" : "neutralDark"}
-        >
-          <span>{label}</span>
-          {toolTipText && <EnglishSpeakingToolTip />}
-        </SmallHeading>
+  // Add function to handle input click
+  const handleInputClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent click from bubbling to parent
+  };
+
+  const selectContent = (
+    <div
+      ref={wrapperRef}
+      className={cn(
+        "select-box relative",
+        disabled && "opacity-50 pointer-events-none",
+        className
       )}
+    >
+      {label && (
+        <Text
+          variant="placeholder"
+          className="mb-2.5 flex items-center gap-2.5"
+          color={dark ? "white" : "neutralLight"}
+        >
+          {label}
+          {required && <span className="text-danger-600">*</span>}
+        </Text>
+      )}
+
       <div
         className={cn(
-          "select-box flex-auto font-medium",
-          relative === false ? "" : "relative",
-          open && "z-[999]"
+          "select-wrapper relative min-h-[40px] rounded-sm border",
+          dark
+            ? "bg-neutralDark border-neutralDark text-white"
+            : "bg-white border-border text-neutralDark",
+          error && "border-danger-600",
+          className
         )}
       >
         <div
-          data-ref={refName}
-          onClick={() => {
-            setOpen(!open);
-            focusSearchInput();
-          }}
-          className={cn(
-            open && "",
-            dark
-              ? "text-white  !bg-neutralDark border-neutralDark"
-              : "bg-productLicensing-50 border-border  text-neutralDark",
-            "select-wrapper h-[40px] rounded-sm  border text-body_3 font-normal bg-white w-full px-2.5 py-2 flex items-center justify-between",
-            className,
-
-            selected &&
-              selected[valueKey] &&
-              selected[valueKey].length > 0 &&
-              dark &&
-              "bg-neutralDark text-white "
-          )}
+          onClick={() => !disabled && setIsOpen(!isOpen)}
+          className="flex items-center justify-between px-2.5 py-2 cursor-pointer"
         >
           <Text
-            size="body_3"
+            variant="placeholder"
             className={cn(
-              "!text-body_3",
-              dark
-                ? "text-white"
-                : selected[labelKey]
-                ? "!text-neutralDark"
-                : "!text-placeholder",
-              ""
+              "font-normal",
+              dark ? "text-white" : "text-neutralDark",
+              isInputFocused && "opacity-0"
             )}
-            // size="body_2"
           >
-            {selected[labelKey] ? selected[labelKey] : placeholder}
+            {renderValue()}
           </Text>
-          <>
-            {withoutIcon === false && (
-              <>
-                {open ? (
-                  <Icon
-                    name="expand_less"
-                    className={cn(
-                      dark ? "!text-white" : "text-neutralDark",
-                      "text-xl"
-                    )}
-                  />
-                ) : (
-                  <Icon
-                    name="keyboard_arrow_down"
-                    className={cn(
-                      dark ? "!text-white" : "text-neutralDark",
-                      "text-xl"
-                    )}
-                  />
-                )}
-              </>
-            )}
-          </>
+          <Icon
+            name={isOpen ? "expand_less" : "keyboard_arrow_down"}
+            className={cn("text-xl", dark ? "text-white" : "text-neutralDark")}
+          />
         </div>
-        {error && (
-          <>
-            <span className="text-sm  font-roboto font-light text-danger-600 w-full mt-2.5 leading-[21px]">
-              {errorMsg}
-            </span>
-          </>
-        )}
-        <ul
-          className={`option-menu hide-scroll  z-[9999] ${
-            col && col > 1 && "w-[" + col + "03%]"
-          } grid grid-cols-${col} absolute left-0 transform top-10 z-10 w-full bg-white overflow-y-auto shadow-[0_2px_4px_0px_rgba(0,0,0,0.2)]  ${
-            open ? "max-h-60" : "max-h-0"
-          }`}
-        >
-          {options && options.length > 0 ? (
-            <>
-              <input
-                // onFocus={() => setOpen(true)}
-                ref={focusRef}
-                tabIndex={tabIndexValue}
-                id="input-search"
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value.toLowerCase())}
-                placeholder={"Search " + placeholder.toLocaleLowerCase()}
-                className={cn(
-                  "text-neutralDark border-b  border-border w-full !text-body_3 font-normal placeholder:text-placeholder p-2 outline-none",
-                  dark
-                    ? "text-white bg-neutralDark placeholder:text-white"
-                    : "text-neutralDark bg-white placeholder:text-placeholder"
-                )}
-              />
-            </>
-          ) : (
-            <></>
-          )}
 
-          {inputValue && inputValue.length > 0 ? (
-            <>
-              {options?.map((option: Options, i: number) => (
-                <li
-                  key={option[valueKey]}
-                  className={`${i == 0 ? " " : ""}  ${
-                    dark
-                      ? "text-white hover:bg-neutral bg-neutralDark"
-                      : "bg-white hover:bg-[#F7F7F7] text-neutralDark"
-                  }  text-body_3 font-normal  w-full px-2.5 py-2 p-2  
-              ${
-                selected &&
-                selected[valueKey] &&
-                option[valueKey].toLowerCase() ===
-                  selected[valueKey].toLowerCase() &&
-                (dark ? " active dark" : " active")
-              }
-              ${
-                (option[labelKey] &&
-                  option[labelKey].toLowerCase().startsWith(inputValue)) ||
-                option[labelKey]?.toLowerCase().includes(inputValue)
-                  ? "block"
-                  : "hidden"
-              }`}
-                  onClick={() => {
-                    if (
-                      option[valueKey].toLowerCase() !==
-                      (selected[valueKey] && selected[valueKey].toLowerCase())
-                    ) {
-                      handleSelectOption(option);
-                    } else {
-                      setOpen(false);
-                    }
-                  }}
-                >
-                  <div className="flex items-center gap-5">
-                    {optionType == "checkbox" ? (
-                      <CheckboxInput
-                        disabled={disabled}
-                        onChange={(e) => {
-                          console.log(e.target.checked);
-                          console.log("disabled", disabled);
-                          if (e.target.checked && !disabled) {
-                            handleSelectOption(option, "add");
-                          } else {
-                            handleSelectOption(option, "remove");
-                          }
-                        }}
-                        checkIcon="field"
-                        type="checkbox"
-                        label={option[labelKey]}
-                        id={option[valueKey]}
-                      />
-                    ) : (
-                      <span>{option[labelKey]}</span>
-                    )}
-
-                    {option?.tag && (
-                      <Text
-                        className="py-1 px-4 bg-[#EBECFE] rounded-full"
-                        size="body_5"
-                        tag="span"
-                        weight="regular"
-                        color="primary"
-                      >
-                        {option?.tag}
-                      </Text>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </>
-          ) : (
-            <>
-              {options?.map((option: Options) => (
-                <li
-                  key={option[valueKey]}
-                  className={`${
-                    dark
-                      ? "text-white hover:bg-neutral bg-neutralDark"
-                      : "bg-white hover:bg-[#F7F7F7] text-neutralDark"
-                  }  text-body_3 font-normal  w-full px-2.5 py-2 p-2  
-            ${
-              selected &&
-              selected[valueKey] &&
-              option[valueKey].toLowerCase() ===
-                selected[valueKey].toLowerCase() &&
-              (dark ? " active dark" : " active")
+        {isSearchable && isOpen && (
+          <input
+            ref={searchInputRef}
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onClick={handleInputClick}
+            onFocus={() => {
+              setIsInputFocused(true);
+            }}
+            onBlur={() => {
+              setIsInputFocused(false);
+              setTimeout(() => {
+                if (!isOpen) {
+                  setSearchValue("");
+                }
+              }, 200);
+            }}
+            placeholder={
+              isInputFocused ? `Search ${placeholder.toLowerCase()}` : ""
             }
-            ${"block"}`}
-                  onClick={() => {
-                    console.log("clicked");
-                    console.log(option[valueKey], selected[valueKey]);
-                    if (
-                      option[valueKey].toLowerCase() !==
-                      (selected[valueKey] && selected[valueKey].toLowerCase())
-                    ) {
-                      handleSelectOption(option);
-                    }
-                  }}
-                >
-                  <div className="flex items-center gap-5">
-                    {optionType == "checkbox" ? (
-                      <CheckboxInput
-                        disabled={disabled}
-                        onChange={(e) => {
-                          console.log(e.target.checked);
-                          console.log("disabled", disabled);
-                          if (e.target.checked && !disabled) {
-                            handleSelectOption(option, "add");
-                          } else {
-                            handleSelectOption(option, "remove");
-                          }
-                        }}
-                        checkIcon="field"
-                        type="checkbox"
-                        label={option[labelKey]}
-                        id={option[valueKey]}
-                      />
-                    ) : (
-                      <span>{option[labelKey]}</span>
-                    )}
+            className={cn(
+              "absolute inset-0 w-full px-2.5 py-2",
+              "bg-transparent outline-none",
+              "z-20", // Increased z-index
+              textVariants({ variant: "placeholder" })
+            )}
+            autoFocus
+          />
+        )}
+      </div>
 
-                    {option?.tag && (
-                      <Text
-                        className="py-1 px-4 bg-[#EBECFE] rounded-full"
-                        size="body_5"
-                        tag="span"
-                        weight="regular"
-                        color="primary"
-                      >
-                        {option?.tag}
-                      </Text>
+      {isOpen && (
+        <div className="absolute w-full mt-[-1px] bg-white border  rounded-sm shadow-lg z-10">
+          <ul className="max-h-60 overflow-y-auto">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <li
+                  key={option.value}
+                  onClick={() => handleSelect(option)}
+                  className={cn(
+                    "px-2.5 py-2 cursor-pointer hover:bg-background",
+                    selectedOptions.includes(option) && "bg-background"
+                  )}
+                >
+                  <div className="flex items-center gap-2">
+                    {isMulti && (
+                      <div></div>
+                      // <CheckboxInput
+                      //   checked={selectedOptions.includes(option)}
+                      //   readOnly
+                      // />
+                    )}
+                    <Text variant="placeholder">{option.label}</Text>
+                    {option.tag && (
+                      <span className="px-2 py-0.5 text-xs bg-background text-primary-600 rounded-full">
+                        {option.tag}
+                      </span>
                     )}
                   </div>
                 </li>
-              ))}
-            </>
-          )}
-        </ul>
-      </div>
-    </>
+              ))
+            ) : (
+              <li className="px-2.5 py-2 text-placeholder">No results found</li>
+            )}
+          </ul>
+        </div>
+      )}
+
+      {error && errorMessage && (
+        <p className="mt-1 text-sm text-danger-600">{errorMessage}</p>
+      )}
+    </div>
   );
+
+  // React Hook Form integration
+  if (control) {
+    return (
+      <Controller
+        name={name}
+        control={control}
+        rules={{ required: required ? "This field is required" : false }}
+        render={({ field }) =>
+          React.cloneElement(selectContent, {
+            value: field.value,
+            onChange: (val: any) => {
+              field.onChange(val);
+              onChange?.(val);
+            },
+            onBlur: () => {
+              field.onBlur();
+              onBlur?.();
+            },
+          })
+        }
+      />
+    );
+  }
+
+  return selectContent;
 };
 
-export { SearchSelect };
+export default SearchSelect;

@@ -23,7 +23,6 @@ body {
   font-smoothing: antialiased;
 }
 
-.service-card {
-  @apply bg-white px-8 py-12 h-[360px];
-  background-color: red;
-}
+/* .testimonial .swiper-slide-active {
+  margin-right: 32px;
+} */

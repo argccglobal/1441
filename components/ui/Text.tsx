@@ -15,9 +15,10 @@ export const textVariants = cva("", {
       body: "text-base leading-[1.5] font-light",
       small_heading: "text-sm leading-[1] font-bold ",
       button: "text-sm leading-[1] font-normal",
-      placeholder: "text-[10px] font-light leading-[1.5] ",
+      placeholder: "text-[12px] font-light leading-[1.5] ",
       footer_menu_title: "text-base font-semibold leading-[1]",
       extra_small: "text-[10px] leading-[1.5] font-light",
+      page_title: "text-[80px] leading-[1] font-normal",
       // Old
       // h1_page_title: "text-[48px] leading-[53.5px] font-bold font-poppins",
       // h2_page_title_2: "text-[48px] leading-[72px] font-medium font-poppins",
@@ -78,7 +79,11 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
     return (
       <Component
         ref={ref}
-        className={cn(textVariants({ variant, font, align }), className, " ")}
+        className={cn(
+          "text-neutralDark",
+          textVariants({ variant, font, align }),
+          className
+        )}
         {...props}
       />
     );

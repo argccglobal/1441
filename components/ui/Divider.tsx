@@ -4,8 +4,9 @@ import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
 import { Text } from "./Text";
 import Link from "next/link";
 import { Icon } from "./Icon";
-import { cn } from "../../lib/utils";
+
 import { cva, VariantProps } from "class-variance-authority";
+import { cn } from "@/utils/classNames";
 
 // extend btn element or paragraph element from react props
 
