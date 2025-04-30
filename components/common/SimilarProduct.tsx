@@ -40,7 +40,15 @@ const SimilarProduct = () => {
             modules={[Navigation]}
             className=" h-full"
             spaceBetween={32}
-            slidesPerView={2}
+            breakpoints={{
+              320: {
+                slidesPerView: 1,
+              },
+
+              768: {
+                slidesPerView: 2,
+              },
+            }}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
               setIsBeginning(swiper.isBeginning);

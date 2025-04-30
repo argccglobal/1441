@@ -17,19 +17,28 @@ import Link from "next/link";
 import FeaturedImg from "@/public/featured.png";
 import Member from "@/components/common/Member";
 import { cn } from "@/utils/classNames";
+import Pagination from "@/components/common/Pagination";
+import Overlay from "@/components/common/Overlay";
+import MemberDetailsOffcanvas from "@/components/OffCanvas/MemberDetailsOffCanvas";
+import { useMemberDetailsOffcanvas } from "@/store/memberDetailsOffcanvas";
 export default function Home() {
   return (
     <div className="flex flex-col">
-      <Image src={HeroImg} alt="Hero" />
-      <TabLinks />
+      {/* <Image src={HeroImg} alt="Hero" />
+      <TabLinks /> */}
       <TeamSections />
     </div>
   );
 }
 
 const TeamSections = () => {
+  const { isOpenCanvas, closeCanvas, openCanvas } = useMemberDetailsOffcanvas();
+
   return (
     <Section bgColor="white">
+      {" "}
+      {isOpenCanvas && <Overlay setAction={closeCanvas} />}
+      <MemberDetailsOffcanvas />
       <div className="flex flex-col items-center gap-20">
         <div className="flex flex-col gap-5 max-w-[600px] items-center text-center">
           <Text variant={"section_title_normal"} className="">
@@ -43,7 +52,7 @@ const TeamSections = () => {
         </div>
         <div className="flex w-full flex-col gap-12">
           <Text variant={"section_title_normal"}>Property Consultants</Text>
-          <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-12">
+          <div className="grid w-full grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-12">
             {
               // 12 item repeted member
               Array.from({ length: 12 }).map((_, index) => (
@@ -55,23 +64,8 @@ const TeamSections = () => {
             <div className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark">
               <Icon name="west" className="text-[16px] text-neutralDark" />
             </div>
-            {[1, 2, 3, 4, 5, "...", 10].map((item) => (
-              <div
-                className={cn(
-                  "flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark",
-                  3 === item ? "bg-neutralDark !text-white" : "bg-transparent"
-                )}
-              >
-                <Text
-                  variant={"small"}
-                  className={cn(
-                    3 === item ? " text-white" : "text-neutralDark"
-                  )}
-                >
-                  {item}
-                </Text>
-              </div>
-            ))}
+
+            <Pagination currentPage={2} totalPages={18} />
             <div className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark">
               <Icon name="east" className="text-[16px] text-neutralDark" />
             </div>

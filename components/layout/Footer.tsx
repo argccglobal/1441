@@ -294,11 +294,11 @@ export const Footer: React.FC<FooterProps> = ({
                   height={50}
                 />
               </Link>
-              <div className="grid grid-cols-[370px_auto] justify-between items-start">
+              <div className="grid grid-cols-1 gap-y-8 md:grid-cols-[370px_auto] justify-between items-start">
                 <Text variant={"small"} className="text-white">
                   Properties & Investments
                 </Text>
-                <div className="flex gap-20 justify-between items-start">
+                <div className="flex gap-20 flex-wrap justify-between items-start">
                   {footerMenu.map((item, index) => (
                     <div key={index} className="flex flex-col gap-8">
                       <Text
@@ -340,7 +340,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-between w-full lg:w-auto gap-16">
+            <div className="flex items-center flex-wrap justify-between w-full lg:w-auto gap-16">
               {/* Facebook
 Instagram
 LinkedIn

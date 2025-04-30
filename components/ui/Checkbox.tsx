@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import { Icon } from "./Icon";
+import { textVariants } from "./Text";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -29,7 +30,7 @@ export const CheckboxInput = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const [checked, setChecked] = React.useState(false);
     return (
-      <div className="flex gap-2.5 items-start">
+      <div className="flex gap-2.5 items-center">
         {labelPosition == "left" && label && <Label label={label} id={id} />}
         <div className="!min-w-[20px] w-[20px] min-h-[20px] h-[20px]  overflow-hidden relative leading-none">
           <input
@@ -87,7 +88,11 @@ const Label = ({
     <label
       htmlFor={id}
       className={[
-        "text-body_2   min-h-[20px] flex items-center font-normal text-neutralDark",
+        textVariants({
+          variant: "placeholder",
+        }),
+        "font-normal leading-none",
+
         className,
       ].join(" ")}
     >

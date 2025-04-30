@@ -1,4 +1,6 @@
 "use client";
+import { usePropertyDetailsOffcanvas } from "@/store/propertyDetailsOffcanvas";
+
 import Section from "@/components/layout/Section";
 import { Text, textVariants } from "@/components/ui/Text";
 import React, { useRef, useState } from "react";
@@ -32,6 +34,8 @@ import Map from "@/components/Map";
 import SimilarProduct from "@/components/common/SimilarProduct";
 import { Button } from "@/components/ui/Button";
 import { CheckboxInput } from "@/components/ui/Checkbox";
+import PropertyOffcanvas from "@/components/OffCanvas/PropertyOffcanvas";
+import Overlay from "@/components/common/Overlay";
 
 const page = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -42,57 +46,28 @@ const page = () => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [activeExploreTab, setActiveExploreTab] = useState("about");
+  // const [isOpenCanvas, setIsOpenCanvas] = useState(false);
+  // const [activeTab, setActiveTab] = useState<string | null>(null);
+
+  const handleOpenTabCanvas = (tab: string) => {
+    setActiveTab(tab);
+    setIsOpenCanvas(true);
+  };
+
+  const { isOpenCanvas, setIsOpenCanvas, activeTab, setActiveTab } =
+    usePropertyDetailsOffcanvas();
+
   return (
     <>
-      <div className="relative bg-[#181818] min-h-[680px]">
-        <Section bgColor="transparent">
-          <div className="grid grid-cols-2 gap-16">
-            <div className="flex flex-col gap-16">
-              <Text variant={"page_title"} className="text-white">
-                Welcome to our Home
-              </Text>
-              <Text variant={"body"} className="text-white">
-                Lorem ipsum dolor sit amet consectetur. In nisl morbi adipiscing
-                proin amet quis. Augue sem egestas venenatis ac lorem integer.
-              </Text>
-            </div>
+      {activeTab && <PropertyOffcanvas />}
+
+      {isOpenCanvas && <Overlay setAction={setIsOpenCanvas} />}
+
+      <Section bgColor="white" className="!pt-0">
+        <div className="flex flex-col ">
+          <div className="flex flex-col gap-5 bg-white sticky top-0 py-5 z-50">
             <div className="flex flex-col gap-5">
-              <div className="flex justify-between items-center py-6 px-8 rounded-[10px] border-[3px] border-[#D97FFF] gap-5">
-                <Text variant={"card_title_large"} className="text-[#BE38F3]">
-                  I’m Buying
-                </Text>
-                <Icon name="east" className="text-[#BE38F3] text-[24px]" />
-              </div>
-              <div className="flex justify-between items-center py-6 px-8 rounded-[10px] border-[3px] border-[#4C5BFF] gap-5">
-                <Text variant={"card_title_large"} className="text-[#3334FF]">
-                  I’m Selling
-                </Text>
-                <Icon name="east" className="text-[#3334FF] text-[24px]" />
-              </div>
-              <div className="flex justify-between items-center py-6 px-8 rounded-[10px] border-[3px] border-[#9DE2FF] gap-5">
-                <Text variant={"card_title_large"} className="text-[#32C9FE]">
-                  I’m Selling
-                </Text>
-                <Icon name="east" className="text-[#32C9FE] text-[24px]" />
-              </div>
-            </div>
-          </div>
-        </Section>
-        <div className="absolute left-0 bottom-0">
-          <Image src={VectorBottomLeftImg} alt="vector" />
-        </div>
-        <div className="absolute right-0 bottom-0">
-          <Image src={VectorBottomRightImg} alt="vector" />
-        </div>
-        <div className="absolute right-0 top-0">
-          <Image src={VectorTopRightImg} alt="vector" />
-        </div>
-      </div>
-      <Section bgColor="white" className="!pt-5">
-        <div className="flex flex-col gap-12">
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-5">
-              <div className="grid grid-cols-[auto_120px_140px_120px_120px_120px_120px_44px] gap-2.5">
+              <div className="grid  grid-cols-2 xs:grid-cols-4  md:grid-cols-[auto_120px_140px_120px_120px_120px_120px_44px] gap-2.5">
                 <div className="flex max-w-[350px] justify-between gap-2.5 h-[40px] px-2.5 items-center bg-white border rounded-[2px] overflow-hidden border-border">
                   <Input
                     id="search"
@@ -179,8 +154,13 @@ const page = () => {
                 />
               </div>
             </div>
-            <LinkText href="/" icon="west" label="Back To Search" />
           </div>
+          <LinkText
+            href="/"
+            icon="west"
+            className="mb-12"
+            label="Back To Search"
+          />
           <div className="flex flex-col gap-12">
             <div className="flex items-start gap-8">
               <div className="flex-auto flex flex-col gap-5">
@@ -208,7 +188,7 @@ const page = () => {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2.5 h-[400px]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 h-[400px]">
               {/* Left - Large Image */}
               <div className="relative col-span-1 h-full">
                 <div
@@ -272,7 +252,30 @@ const page = () => {
               </div>
 
               {/* Right - Four Small Images */}
-              <div className="grid grid-cols-2 gap-2.5 h-full">
+              <div className="grid relative grid-cols-2 gap-2.5 h-full">
+                <div className="absolute z-10 flex items-center gap-5 right-2.5 bottom-5">
+                  <div
+                    onClick={() => handleOpenTabCanvas("photos")}
+                    className="flex cursor-pointer px-5 h-10 rounded-full items-center bg-[#363636B2] gap-2.5"
+                  >
+                    <Icon
+                      name="photo_camera"
+                      className="text-white text-[20px]"
+                    />
+                    <Text variant={"button"} className="text-white">
+                      37 Photos
+                    </Text>
+                  </div>
+                  <div
+                    onClick={() => handleOpenTabCanvas("floor plan")}
+                    className="flex cursor-pointer  px-5 h-10 rounded-full items-center bg-[#363636B2] gap-2.5"
+                  >
+                    <Icon name="map" className="text-white text-[20px]" />
+                    <Text variant={"button"} className="text-white">
+                      Floor Plan
+                    </Text>
+                  </div>
+                </div>
                 <div className="relative h-full group overflow-hidden">
                   <Image
                     src={GalleryImg2}
@@ -307,7 +310,7 @@ const page = () => {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-[773px_1px_auto] gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-[773px_1px_auto] gap-12">
               <div className="flex flex-col gap-12">
                 <div className="flex flex-col gap-5">
                   <Text variant={"section_title_normal"}>In Details</Text>

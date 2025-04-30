@@ -168,7 +168,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
             variant="placeholder"
             className={cn(
               "font-normal",
-              dark ? "text-white" : "text-neutralDark",
+              dark ? "text-white" : "text-neutralLight",
               isInputFocused && "opacity-0"
             )}
           >

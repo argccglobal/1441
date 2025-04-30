@@ -8,11 +8,14 @@ import ServiceCard from "@/components/common/ServiceCard";
 import { useState } from "react";
 import { cn } from "@/utils/classNames";
 import ContentSection from "@/components/common/ContentSection";
+import { Icon } from "@/components/ui/Icon";
+import { Divider } from "@/components/ui/Divider";
+import SideTabBtn from "@/components/SideTabBtn";
 export default function Home() {
   return (
-    <div className="flex flex-col">
-      <Image src={HeroImg} alt="Hero" />
-      <TabLinks />
+    <div className="flex relative flex-col">
+      {/* <Image src={HeroImg} alt="Hero" /> */}
+      {/* <TabLinks /> */}
       <Policy />
       {/* <ConciergeService /> */}
     </div>

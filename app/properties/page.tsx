@@ -11,58 +11,25 @@ import Property from "@/components/card/Property";
 import { Input } from "@/components/ui/Input";
 import SearchSelect from "@/components/ui/SearchSelect";
 import { cn } from "@/utils/classNames";
+import UnlockAccessPopup from "@/components/Modal/UnlockAccessPopup";
+import BuyingModal from "@/components/Modal/BuyingModal";
+import SellingModal from "@/components/Modal/SellingModal";
+import InvestingModal from "@/components/Modal/InvestingModal";
+import Pagination from "@/components/common/Pagination";
 
 const page = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const handleSortSelect = () => {
     setIsOpen(!isOpen);
   };
+  const [isOpeBuyingModal, setIsOpeBuyingModal] =
+    React.useState<boolean>(false);
+  const [isOpeSellingModal, setIsOpeSellingModal] =
+    React.useState<boolean>(false);
+  const [isOpeInvestingModal, setIsOpeInvestingModal] =
+    React.useState<boolean>(false);
   return (
     <>
-      <div className="relative bg-[#181818] min-h-[680px]">
-        <Section bgColor="transparent">
-          <div className="grid grid-cols-2 gap-16">
-            <div className="flex flex-col gap-16">
-              <Text variant={"page_title"} className="text-white">
-                Welcome to our Home
-              </Text>
-              <Text variant={"body"} className="text-white">
-                Lorem ipsum dolor sit amet consectetur. In nisl morbi adipiscing
-                proin amet quis. Augue sem egestas venenatis ac lorem integer.
-              </Text>
-            </div>
-            <div className="flex flex-col gap-5">
-              <div className="flex justify-between items-center py-6 px-8 rounded-[10px] border-[3px] border-[#D97FFF] gap-5">
-                <Text variant={"card_title_large"} className="text-[#BE38F3]">
-                  I’m Buying
-                </Text>
-                <Icon name="east" className="text-[#BE38F3] text-[24px]" />
-              </div>
-              <div className="flex justify-between items-center py-6 px-8 rounded-[10px] border-[3px] border-[#4C5BFF] gap-5">
-                <Text variant={"card_title_large"} className="text-[#3334FF]">
-                  I’m Selling
-                </Text>
-                <Icon name="east" className="text-[#3334FF] text-[24px]" />
-              </div>
-              <div className="flex justify-between items-center py-6 px-8 rounded-[10px] border-[3px] border-[#9DE2FF] gap-5">
-                <Text variant={"card_title_large"} className="text-[#32C9FE]">
-                  I’m Selling
-                </Text>
-                <Icon name="east" className="text-[#32C9FE] text-[24px]" />
-              </div>
-            </div>
-          </div>
-        </Section>
-        <div className="absolute left-0 bottom-0">
-          <Image src={VectorBottomLeftImg} alt="vector" />
-        </div>
-        <div className="absolute right-0 bottom-0">
-          <Image src={VectorBottomRightImg} alt="vector" />
-        </div>
-        <div className="absolute right-0 top-0">
-          <Image src={VectorTopRightImg} alt="vector" />
-        </div>
-      </div>
       <Section bgColor="white">
         <div className="flex flex-col gap-20">
           <div className="flex flex-col gap-8">
@@ -75,7 +42,7 @@ const page = () => {
             <div className="border-t border-border"></div>
           </div>
           <div className="flex flex-col gap-5">
-            <div className="grid grid-cols-[auto_120px_140px_120px_120px_120px_120px_44px] gap-2.5">
+            <div className="grid  grid-cols-2 xs:grid-cols-4  md:grid-cols-[auto_120px_140px_120px_120px_120px_120px_44px] gap-2.5">
               <div className="flex max-w-[350px] justify-between gap-2.5 h-[40px] px-2.5 items-center bg-white border rounded-[2px] overflow-hidden border-border">
                 <Input
                   id="search"
@@ -217,16 +184,26 @@ const page = () => {
                 ]}
               /> */}
             </div>
-            <div className="grid grid-cols-3 gap-x-8 gap-y-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-16">
+              <Property />
               <Property />
               <Property isBlur />
+              <Property />
+              <Property />
+
+              <Property />
+              <Property />
+
+              <Property />
+              <Property />
             </div>
             <div className="flex items-center gap-5">
               <div className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark">
                 <Icon name="west" className="text-[16px] text-neutralDark" />
               </div>
-              {[1, 2, 3, 4, 5, "...", 10].map((item) => (
+              {/* {[1, 2, 3, 4, 5, "...", 10].map((item) => (
                 <div
+                  key={item}
                   className={cn(
                     "flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark",
                     3 === item ? "bg-neutralDark text-white" : "bg-transparent"
@@ -234,7 +211,8 @@ const page = () => {
                 >
                   <Text variant={"small"}>{item}</Text>
                 </div>
-              ))}
+              ))} */}
+              <Pagination currentPage={2} totalPages={18} />
               <div className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark">
                 <Icon name="east" className="text-[16px] text-neutralDark" />
               </div>

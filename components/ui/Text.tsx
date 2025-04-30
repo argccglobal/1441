@@ -7,18 +7,19 @@ export const textVariants = cva("", {
   variants: {
     variant: {
       // ?New
-      navbar_text: "text-[14px] leading-[1.5] font-normal",
-      small: "text-sm leading-[1.5] font-normal ",
-      card_title_small: "text-base leading-[1] font-medium ",
-      card_title_large: "text-lg leading-[1] font-normal",
-      section_title_normal: "text-[26px] leading-[1.5] font-bold",
-      body: "text-base leading-[1.5] font-light",
-      small_heading: "text-sm leading-[1] font-bold ",
-      button: "text-sm leading-[1] font-normal",
-      placeholder: "text-[12px] font-light leading-[1.5] ",
-      footer_menu_title: "text-base font-semibold leading-[1]",
-      extra_small: "text-[10px] leading-[1.5] font-light",
-      page_title: "text-[80px] leading-[1] font-normal",
+      navbar_text: "text-[14px] leading-[1.5] font-normal text-neutralDark",
+      small: "text-sm leading-[1.5] font-normal  text-neutralDark",
+      card_title_small: "text-base leading-[1] font-medium  text-neutralDark",
+      card_title_large: "text-lg leading-[1] font-normal text-neutralDark",
+      section_title_normal:
+        "text-[26px] leading-[1.5] font-bold text-neutralDark",
+      body: "text-base leading-[1.5] font-light text-neutralDark",
+      small_heading: "text-sm leading-[1] font-bold  text-neutralDark",
+      button: "text-sm leading-[1] font-normal text-neutralDark",
+      placeholder: "text-[12px] font-light leading-[1.5]  text-neutralDark",
+      footer_menu_title: "text-base font-semibold leading-[1] text-neutralDark",
+      extra_small: "text-[10px] leading-[1.5] font-light text-neutralDark",
+      page_title: "text-[80px] leading-[1] font-normal text-neutralDark",
       // Old
       // h1_page_title: "text-[48px] leading-[53.5px] font-bold font-poppins",
       // h2_page_title_2: "text-[48px] leading-[72px] font-medium font-poppins",
@@ -79,11 +80,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
     return (
       <Component
         ref={ref}
-        className={cn(
-          "text-neutralDark",
-          textVariants({ variant, font, align }),
-          className
-        )}
+        className={cn(textVariants({ variant, font, align }), className)}
         {...props}
       />
     );

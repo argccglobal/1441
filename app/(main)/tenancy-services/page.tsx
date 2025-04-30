@@ -8,8 +8,8 @@ import ServiceCard from "@/components/common/ServiceCard";
 export default function Home() {
   return (
     <div className="flex flex-col">
-      <Image src={HeroImg} alt="Hero" />
-      <TabLinks />
+      {/* <Image src={HeroImg} alt="Hero" />
+      <TabLinks /> */}
       <ConciergeService />
       <HaveQuestions />
     </div>

@@ -29,8 +29,8 @@ import { useRef, useState } from "react";
 export default function Home() {
   return (
     <div className="flex flex-col">
-      <Image src={HeroImg} alt="Hero" />
-      <TabLinks />
+      {/* <Image src={HeroImg} alt="Hero" />
+      <TabLinks /> */}
       <AboutArea />
       <PropertyConsultant />
       <OurPartners />

@@ -4,7 +4,7 @@ import { cn } from "@/utils/classNames";
 import NextLink from "next/link";
 const TabLinks = () => {
   const className = "bg-properties bg-team bg-contact bg-services";
-  const tabs = ["properties", "team", "services", "contact"];
+  const tabs = ["properties", "team", "services", "contact Us"];
 
   return (
     <div className="grid grid-cols-4 items-center">

@@ -98,7 +98,7 @@ export const Subscribe: React.FC<SubscribeProps> = ({
           type={"text"}
           placeholder={placeholder}
           className={[
-            "border-[1.5px] h-[40px] flex-1 sm:flex-initial text-white placeholder:text-placeholder outline-none px-2.5 py-2  bg-transparent focus:border-[#13BFC7] border-[#13BFC7] text-body_2 placeholder:text-body_2",
+            "border-[1.5px] h-[40px] flex-1 sm:flex-initial text-white placeholder:text-placeholder outline-none px-2.5 py-2  bg-transparent focus:border-[#2FDCE1] border-[#2FDCE1] text-body_2 placeholder:text-body_2",
             className,
           ].join(" ")}
         />
@@ -106,7 +106,7 @@ export const Subscribe: React.FC<SubscribeProps> = ({
         <Button
           // isLoading={btnLoader}
           btnType="submit"
-          className="rounded-none border-none text-body_1 hover:bg-[#13BFC7]  bg-[#13BFC7]"
+          className="rounded-none text-neutralDark border-none text-body_1 hover:bg-[#2FDCE1]  bg-[#2FDCE1]"
           type="button"
           size="small"
           label="Subscribe"

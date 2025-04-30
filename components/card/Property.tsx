@@ -4,19 +4,27 @@ import Image from "next/image";
 import { Text } from "../ui/Text";
 import { Divider } from "../ui/Divider";
 import { Icon } from "../ui/Icon";
+import UnlockAccessPopup from "../Modal/UnlockAccessPopup";
 const Property = ({ isBlur }: { isBlur?: boolean }) => {
+  const [isOpenUnlockModal, setIsOpenUnlockModal] = React.useState(false);
+
   return (
     <div className="flex relative flex-col gap-5">
+      <UnlockAccessPopup
+        isOpen={isOpenUnlockModal}
+        closeModel={() => setIsOpenUnlockModal(false)}
+      />
       <div className="absolute top-2.5 right-2.5 h-8 flex items-center justify-center w-8 rounded-full bg-[#EDFEFD]">
         <Icon name="bookmark_border" className="text-[20px]" />
       </div>
       <div className="absolute top-0 left-0 px-2.5 py-1 text-white bg-neutralDark">
-        <Text variant={"button"} className="text-[12px]">
+        <Text variant={"button"} className="text-[12px] text-white">
           New Listing
         </Text>
       </div>
       {isBlur ? (
         <div
+          onClick={() => setIsOpenUnlockModal(true)}
           className="h-[250px] flex justify-center items-center relative"
           style={{
             backgroundImage: `url(${PropertyImg.src})`,
