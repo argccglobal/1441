@@ -18,8 +18,9 @@ import Image from "next/image";
 import { Icon } from "../ui/Icon";
 import { textVariants } from "../ui/Text";
 import Map from "../Map";
+import { Property } from "@/api/endpoints/properties";
 
-const PropertyOffcanvas = () => {
+const PropertyOffcanvas = ({ data }: { data: Property }) => {
   // const [isOpenCanvas, setIsOpenCanvas] = React.useState(false);
   const { isOpenCanvas, setIsOpenCanvas, activeTab, setActiveTab } =
     usePropertyDetailsOffcanvas();
@@ -58,9 +59,11 @@ const PropertyOffcanvas = () => {
           ))}
         </div>
         <div className="overflow-y-auto max-w-[1074px] w-full h-full">
-          {activeTab === "photos" && <Photos />}
-          {activeTab === "floor plan" && <FloorPlanCanvas />}
-          {activeTab === "video" && <Videos />}
+          {activeTab === "photos" && <Photos data={data.media} />}
+          {activeTab === "floor plan" && (
+            <FloorPlanCanvas data={data.media.floorPlan} />
+          )}
+          {activeTab === "video" && <Videos data={data.media} />}
           {activeTab === "map" && <MapLocation />}
           {/* <Photos /> */}
         </div>
@@ -69,11 +72,13 @@ const PropertyOffcanvas = () => {
   );
 };
 
-const FloorPlanCanvas = () => {
+const FloorPlanCanvas = ({ data }: { data: any }) => {
   return (
     <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-4 md:grid-cols-6">
       <div className="col-span-6">
-        <Image src={FloorPlan} alt="Floor Plan" />
+        {data && (
+          <Image src={data} width={1080} height={800} alt="Floor Plan" />
+        )}
       </div>
     </div>
   );
@@ -105,9 +110,23 @@ const MapLocation = () => {
   );
 };
 
-const Photos = () => {
+const Photos = ({ data }: { data: any }) => {
   return (
-    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-4 md:grid-cols-6">
+    <div className="grid grid-cols-1 items-start gap-2.5 sm:grid-cols-4 md:grid-cols-6">
+      {data.galleryPhotos &&
+        data.galleryPhotos.length > 0 &&
+        data.galleryPhotos?.map((item, index) => (
+          <div key={index} className="sm:col-span-2">
+            <Image
+              src={item.url}
+              // fill
+              width={600}
+              height={250}
+              className=" object-contain w-full h-full"
+              alt="Gallery Image 1"
+            />
+          </div>
+        ))}
       <div className="sm:col-span-2">
         <Image
           src={TabPhoto1}
@@ -115,7 +134,7 @@ const Photos = () => {
           alt="Slider Image 1"
         />
       </div>
-      <div className="sm:col-span-2">
+      {/* <div className="sm:col-span-2">
         <Image
           src={TabPhoto2}
           className=" object-contain w-full"
@@ -168,7 +187,7 @@ const Photos = () => {
           className=" object-contain w-full"
           alt="Slider Image 1"
         />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,15 +1,18 @@
 "use client";
-import { usePropertyDetailsOffcanvas } from "@/store/propertyDetailsOffcanvas";
+import {
+  usePropertyDetailsOffcanvas,
+  usePropertyPageData,
+} from "@/store/propertyDetailsOffcanvas";
 
 import Section from "@/components/layout/Section";
 import { Text, textVariants } from "@/components/ui/Text";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import VectorBottomLeftImg from "@/public/vector_bottom_left.svg";
 import VectorBottomRightImg from "@/public/vector_bottom_right.svg";
 import VectorTopRightImg from "@/public/vector_top_right.svg";
 import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
-import Property from "@/components/card/Property";
+// import Property from "@/components/card/Property";
 import { Input } from "@/components/ui/Input";
 import SearchSelect from "@/components/ui/SearchSelect";
 import { cn } from "@/utils/classNames";
@@ -36,8 +39,19 @@ import { Button } from "@/components/ui/Button";
 import { CheckboxInput } from "@/components/ui/Checkbox";
 import PropertyOffcanvas from "@/components/OffCanvas/PropertyOffcanvas";
 import Overlay from "@/components/common/Overlay";
+import { useParams, useRouter } from "next/navigation";
+import api from "@/api/axios";
+import {
+  AreaExplore,
+  propertiesApi,
+  Property,
+} from "@/api/endpoints/properties";
 
-const page = () => {
+const Page = () => {
+  // const { propertiesPageData } = usePropertyPageData();
+  // const router = useRouter();
+  const params = useParams();
+  const slug = params?.id;
   const [isOpen, setIsOpen] = React.useState(false);
   const handleSortSelect = () => {
     setIsOpen(!isOpen);
@@ -46,6 +60,7 @@ const page = () => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [activeExploreTab, setActiveExploreTab] = useState("about");
+
   // const [isOpenCanvas, setIsOpenCanvas] = useState(false);
   // const [activeTab, setActiveTab] = useState<string | null>(null);
 
@@ -57,13 +72,28 @@ const page = () => {
   const { isOpenCanvas, setIsOpenCanvas, activeTab, setActiveTab } =
     usePropertyDetailsOffcanvas();
 
+  // return <div>Properties</div>;
+  const [propertyDetails, setPropertyDetails] = useState<Property | null>(null);
+  const fetchPropertyDetails = async () => {
+    if (slug) {
+      const response = await propertiesApi.getPropertyById(slug as string);
+      console.log(response);
+      setPropertyDetails(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchPropertyDetails();
+  }, [slug]);
+
   return (
     <>
-      {activeTab && <PropertyOffcanvas />}
+      {activeTab && <PropertyOffcanvas data={propertyDetails} />}
 
       {isOpenCanvas && <Overlay setAction={setIsOpenCanvas} />}
 
       <Section bgColor="white" className="!pt-0">
+        {/* {router?.query?.slug} */}
         <div className="flex flex-col ">
           <div className="flex flex-col gap-5 bg-white sticky top-0 py-5 z-50">
             <div className="flex flex-col gap-5">
@@ -166,16 +196,21 @@ const page = () => {
               <div className="flex-auto flex flex-col gap-5">
                 <div className="flex items-center gap-5">
                   <Text variant={"section_title_normal"} className="">
-                    The Grand Haven Estate On C.13.82 Ha (c.34.15 Acres)
+                    {propertyDetails?.title}
                   </Text>
                   <span className="px-2.5 py-1 bg-[#88F1F2]">
                     <Text variant={"small"} className="text-[12px]">
-                      Recently Sold
+                      {propertyDetails?.status === "active" ? "Active" : "Sold"}
                     </Text>
                   </span>
                 </div>
-                <Text variant={"card_title_small"}>Abu Dhabi, UAE</Text>
-                <Text variant={"card_title_small"}>AED 1,000,000</Text>
+                <Text variant={"card_title_small"}>
+                  {propertyDetails?.location?.city},{" "}
+                  {propertyDetails?.location?.country}
+                </Text>
+                <Text variant={"card_title_small"}>
+                  {propertyDetails?.currency} {propertyDetails?.price}{" "}
+                </Text>
               </div>
               <div className="flex items-center gap-8">
                 <div className="flex cursor-pointer items-center gap-2.5">
@@ -224,30 +259,19 @@ const page = () => {
                     setIsEnd(swiper.isEnd);
                   }}
                 >
-                  <SwiperSlide>
-                    <Image
-                      src={SliderImg1}
-                      alt="Large Image"
-                      fill
-                      className="object-cover w-full"
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Image
-                      src={SliderImg1}
-                      alt="Large Image"
-                      fill
-                      className="object-cover w-full"
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Image
-                      src={SliderImg1}
-                      alt="Large Image"
-                      fill
-                      className="object-cover "
-                    />
-                  </SwiperSlide>
+                  {propertyDetails?.media?.sliderPhotos?.map((photo, index) => (
+                    <SwiperSlide>
+                      <Image
+                        src={photo.url}
+                        alt="Large Image"
+                        fill
+                        key={index}
+                        // width={600}
+                        // height={400}
+                        className="object-cover w-full"
+                      />
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
               </div>
 
@@ -263,7 +287,8 @@ const page = () => {
                       className="text-white text-[20px]"
                     />
                     <Text variant={"button"} className="text-white">
-                      37 Photos
+                      {propertyDetails?.media?.galleryPhotos?.length || 0}{" "}
+                      Photos
                     </Text>
                   </div>
                   <div
@@ -276,38 +301,21 @@ const page = () => {
                     </Text>
                   </div>
                 </div>
-                <div className="relative h-full group overflow-hidden">
-                  <Image
-                    src={GalleryImg2}
-                    alt={`Small Image ${1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-full group overflow-hidden">
-                  <Image
-                    src={GalleryImg1}
-                    alt={`Small Image ${1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-full group overflow-hidden">
-                  <Image
-                    src={GalleryImg3}
-                    alt={`Small Image ${1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-full group overflow-hidden">
-                  <Image
-                    src={GalleryImg4}
-                    alt={`Small Image ${1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+                {propertyDetails?.media?.galleryPhotos
+                  ?.slice(0, 4)
+                  .map((photo, index) => (
+                    <div
+                      key={index}
+                      className="relative h-full group overflow-hidden"
+                    >
+                      <Image
+                        src={photo.url}
+                        alt={`Small Image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[773px_1px_auto] gap-12">
@@ -351,16 +359,12 @@ const page = () => {
                         <Text variant={"card_title_small"}>Map</Text>
                       </div>
                     </div>
-                    <PropertyCoreDetails />
+                    <PropertyCoreDetails property={propertyDetails} />
                   </div>
                 </div>
                 <ContentSection
                   color="!text-neutralDark"
-                  texts={[
-                    "Lorem ipsum dolor sit amet consectetur. In nisl morbi adipiscing proin amet quis. Augue sem egestas venenatis ac lorem integer. Faucibus nibh ligula magna facilisis. Eu adipiscing sem aliquam porta lorem nunc malesuada. Nulla odio arcu sem magnis faucibus in tortor leo. Mauris nunc imperdiet purus augue nunc.",
-                    "Ullamcorper bibendum quis egestas fringilla mauris. Pellentesque elementum sit gravida aenean. A arcu ut leo velit. Elementum varius ac pellentesque tincidunt id.",
-                    "Egestas diam eget ornare pharetra morbi facilisis tristique ipsum. Fringilla nisi auctor risus lectus etiam sed ultricies. Pellentesque maecenas ut malesuada bibendum tincidunt sit aliquam. Fringilla nec mattis tortor amet egestas in. Arcu mi elementum vulputate auctor amet proin risus. Velit eu consequat diam pharetra.",
-                  ]}
+                  texts={[propertyDetails?.description || "No Description"]}
                 />
                 <div className="border-t border-border"></div>
                 <div className="flex flex-col gap-5">
@@ -423,13 +427,23 @@ const page = () => {
                       Others
                     </button>
                   </div>
-                  {activeExploreTab === "about" && <About />}
-                  {activeExploreTab === "landmarks" && <Landmarks />}
-                  {activeExploreTab === "schools" && <Schools />}
-                  {activeExploreTab === "others" && <Other />}
+                  {activeExploreTab === "about" && (
+                    <About about={propertyDetails?.areaExplore?.about} />
+                  )}
+                  {activeExploreTab === "landmarks" && (
+                    <Landmarks
+                      landmarks={propertyDetails?.areaExplore?.landmarks}
+                    />
+                  )}
+                  {activeExploreTab === "schools" && (
+                    <Schools schools={propertyDetails?.areaExplore?.schools} />
+                  )}
+                  {activeExploreTab === "others" && (
+                    <Other others={propertyDetails?.areaExplore?.others} />
+                  )}
                 </div>
                 <div className="border-t border-border"></div>
-                <SimilarProduct />
+                {/* <SimilarProduct /> */}
               </div>
               <div className="h-full bg-border"></div>
               <div className="flex flex-col gap-12">
@@ -446,6 +460,7 @@ const page = () => {
                         "Mansion",
                       ].map((item, index) => (
                         <Text
+                          key={index}
                           variant={"small"}
                           className="flex-[1/2] w-1/2 Garden"
                         >
@@ -567,21 +582,16 @@ const page = () => {
     </>
   );
 };
-const About = () => {
+const About = ({ about }: { about: any }) => {
   return (
     <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-5">
         <Text variant={"card_title_large"}>
-          {`{Buckinghamshire} Area Guide `}
+          {about?.title ? about?.title : "About Buckinghamshire"}
         </Text>
         <BulletText
           style="disc"
-          texts={[
-            "Buckinghamshire is a peaceful, friendly area offering an array of beautiful towns and picturesque landscapes. A ceremonial county bordering Greater London, Buckinghamshire offers a quaint, countryside alternative to the bustling streets of the capital, whilst still remaining closely connected to the city through a range of superb transport links.",
-            "The area holds a population of over 540,000, and is home to some charming towns including Beaconsfield, High Wycombe and Aylesbury. In fact, Buckinghamshire is the most filmed English county, offering the backdrops for Midsummer Murders, James Bond films, Harry Potter and more.",
-            "Whilst the cinematic scenery for many well-known films and TV series, Buckinghamshire is so much more than its on-screen appearances, with a wonderful community surrounded by beautiful natural spaces. The area holds the highest amount of National Trust Parks for one county, giving both residents and visitors alike quick and easy access to several stunning spots.",
-            "Located on the M1, Buckinghamshire is around 45 mins to 1 hour-drive to main parts of London.",
-          ]}
+          texts={[about?.description || "No Description"]}
         />
       </div>
       <LinkText
@@ -593,75 +603,50 @@ const About = () => {
     </div>
   );
 };
-const Landmarks = () => {
-  const leftPartStation = [
-    {
-      iconName: "transfer_within_a_station",
-      title: "Gloucester Road",
-      distance: "0.07miles",
-    },
-    {
-      iconName: "directions_subway",
-      title: "Gloucester Road",
-      distance: "0.07miles",
-    },
-    {
-      iconName: "transfer_within_a_station",
-      title: "Gloucester Road",
-      distance: "0.07miles",
-    },
-  ];
-  const rightPartStation = [
-    {
-      iconName: "transfer_within_a_station",
-      title: "Gloucester Road",
-      distance: "0.07miles",
-    },
-    {
-      iconName: "transfer_within_a_station",
-      title: "Gloucester Road",
-      distance: "0.07miles",
-    },
-    {
-      iconName: "transfer_within_a_station",
-      title: "Gloucester Road",
-      distance: "0.07miles",
-    },
-  ];
+const Landmarks = ({ landmarks }: { landmarks: any }) => {
   return (
     <div className="flex flex-col gap-5">
       <Text variant={"card_title_large"}>Stations</Text>
       <div className="grid grid-cols-[auto_1px_auto] gap-8">
         <div className="flex flex-col gap-5">
-          {leftPartStation.map((item, index) => (
-            <StationItem {...item} />
-          ))}
+          {landmarks &&
+            landmarks.length > 0 &&
+            landmarks.map((item, index) => <StationItem {...item} />)}
         </div>
 
         <div className="bg-border h-full"></div>
-        <div className="flex flex-col gap-5">
+        {/* <div className="flex flex-col gap-5">
           {rightPartStation.map((item, index) => (
             <StationItem {...item} />
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 const StationItem = ({
-  iconName,
-  title,
+  icon,
+  name,
   distance,
 }: {
-  iconName: string;
-  title: string;
-  distance: string;
+  // iconName: string;
+  // title: string;
+  // distance: string;
+  _id: string;
+  name: string;
+  type: string;
+  icon: string;
+  distance: number;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 }) => {
   return (
     <div className="flex items-center gap-2.5">
-      <Icon name={iconName} className="text-[20px]" />
+      <Icon name={icon} className="text-[20px]" />
       <div className="flex flex-auto items-center gap-2.5 justify-between">
-        <Text variant={"card_title_large"}>{title}</Text>
+        <Text variant={"card_title_large"}>{name}</Text>
         <Text variant={"card_title_large"} className="text-neutral">
           {distance}
         </Text>
@@ -690,17 +675,18 @@ const schoolsData = [
     ofsted: "Good",
   },
 ];
-const Schools = () => {
+const Schools = ({ schools }: { schools: any }) => {
   return (
     <div className="flex flex-col gap-5">
-      {schoolsData.map((school, index) => (
-        <SchoolsItem key={index} school={school} />
-      ))}
+      {schools &&
+        schools.map((school, index) => (
+          <SchoolsItem key={index} school={school} />
+        ))}
     </div>
   );
 };
 
-const SchoolsItem = ({ school }: { school: (typeof schoolsData)[0] }) => {
+const SchoolsItem = ({ school }: { school: any }) => {
   return (
     <div className="flex items-start gap-2.5 w-full">
       <Icon name="school" className="text-[20px]" />
@@ -712,20 +698,21 @@ const SchoolsItem = ({ school }: { school: (typeof schoolsData)[0] }) => {
           </Text>
         </div>
 
-        <Text variant={"body"}>Age: {school.age}</Text>
-        <Text variant={"body"}>Ofsted: {school.ofsted}</Text>
+        <Text variant={"body"}>Age: {school.ageRange}</Text>
+        <Text variant={"body"}>Ofsted: {school.ofstedRating}</Text>
       </div>
     </div>
   );
 };
 
-const Other = () => {
+const Other = ({ others }: { others: any }) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-2.5">
         <Text variant={"body"}>
           Thurston, Bury Saint Edmunds IP31 3QZ, UK, Thurston, England, United
           Kingdom.
+          {/* {others.} */}
         </Text>
         <Link
           href={"/"}
@@ -744,4 +731,4 @@ const Other = () => {
   );
 };
 
-export default page;
+export default Page;

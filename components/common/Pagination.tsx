@@ -6,9 +6,11 @@ import { Icon } from "../ui/Icon";
 const Pagination = ({
   currentPage,
   totalPages,
+  onChange,
 }: {
   currentPage: number;
   totalPages: number;
+  onChange?: (page: number) => void;
 }) => {
   const getPageNumbers = () => {
     const pages: (number | "more_horiz")[] = [];
@@ -44,6 +46,7 @@ const Pagination = ({
             <Icon className="text-[16px] text-[#ACABAC]" name="more_horiz" />
           ) : (
             <Text
+              onClick={() => onChange && onChange(item as number)}
               variant="small"
               className={cn(
                 currentPage === item ? "text-white" : "text-neutralDark"

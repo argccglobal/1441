@@ -5,11 +5,29 @@ import { Text } from "../ui/Text";
 import { Divider } from "../ui/Divider";
 import { Icon } from "../ui/Icon";
 import UnlockAccessPopup from "../Modal/UnlockAccessPopup";
-const Property = ({ isBlur }: { isBlur?: boolean }) => {
+import { Property } from "@/api/endpoints/properties";
+import { useRouter } from "next/navigation";
+const Property = ({
+  isBlur,
+  property,
+}: {
+  isBlur?: boolean;
+  property: Property;
+}) => {
   const [isOpenUnlockModal, setIsOpenUnlockModal] = React.useState(false);
-
+  const router = useRouter();
   return (
-    <div className="flex relative flex-col gap-5">
+    <div
+      className="flex relative flex-col gap-5"
+      onClick={() => {
+        if (isBlur) {
+          setIsOpenUnlockModal(true);
+        } else {
+          // window.location.href = `/properties/${property.id}`;
+          router.push(`/properties/${property._id}`);
+        }
+      }}
+    >
       <UnlockAccessPopup
         isOpen={isOpenUnlockModal}
         closeModel={() => setIsOpenUnlockModal(false)}
@@ -19,7 +37,11 @@ const Property = ({ isBlur }: { isBlur?: boolean }) => {
       </div>
       <div className="absolute top-0 left-0 px-2.5 py-1 text-white bg-neutralDark">
         <Text variant={"button"} className="text-[12px] text-white">
-          New Listing
+          {property?.recentlySold
+            ? "Recently Sold"
+            : property?.featured
+            ? "Featured"
+            : property?.status}
         </Text>
       </div>
       {isBlur ? (
@@ -40,7 +62,8 @@ const Property = ({ isBlur }: { isBlur?: boolean }) => {
       ) : (
         <div className="">
           <Image
-            src={PropertyImg}
+            src={property.media.featuredPhoto && property.media.featuredPhoto.length > 0 ? property.media.featuredPhoto[0] : PropertyImg.src}
+            width={600}
             alt="property"
             height={250}
             className="w-full object-cover max-h-[250px]"
@@ -52,23 +75,38 @@ const Property = ({ isBlur }: { isBlur?: boolean }) => {
         <div className="flex flex-col gap-[14px]">
           <div className="flex flex-col gap-2.5">
             <Text variant={"small_heading"} className="text-neutralDark">
-              For Sale House/ Villa, Abu Dhabi
+              {/* For Sale House/ Villa, Abu Dhabi */}
+              {property.propertyType && (
+                <span className="text-neutralDark">
+                  {property.propertyType} /
+                </span>
+              )}{" "}
+              {property.location.city && (
+                <span className="text-neutralDark">
+                  {property.location.city}
+                </span>
+              )}{" "}
+              {property.location.country && (
+                <span className="text-neutralDark">
+                  {property.location.country}
+                </span>
+              )}
             </Text>
             <Text variant={"card_title_large"} className="text-neutralDark">
-              $1,595,000
+              {property.currency} {property.price.toLocaleString()}
             </Text>
           </div>
           <Text variant={"small_heading"} className="text-neutralDark">
-            The Grand Haven Estate
+            {property.title}
           </Text>
         </div>
         <div className="border-t border-border" />
         <div className="flex items-center gap-8 flex-wrap">
           {[
-            { value: "5", label: "Bedroom" },
-            { value: "5", label: "Bathrooms" },
-            { value: "5242", label: "Floor Plan" },
-            { value: "667m2", label: "Plot Size" },
+            { value: property.features.bedrooms || "-", label: "Bedroom" },
+            { value: property.features.bathrooms || "-", label: "Bathrooms" },
+            { value: property.features.floorPlanSize || "-", label: "Floor Plan" },
+            { value: property.landSizeAcres ? `${property.landSizeAcres} acres` : (property.landSize ? `${property.landSize} ${property.landSizeUnit || 'units'}` : "-"), label: "Plot Size" },
           ].map((item, index) => (
             <div key={index} className="flex flex-col gap-2.5">
               <Text variant={"small"} className="font-bold">

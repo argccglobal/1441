@@ -5,6 +5,7 @@ import { Navigation } from "swiper/modules";
 import Property from "../card/Property";
 import { Icon } from "../ui/Icon";
 import { cn } from "@/utils/classNames";
+
 const SimilarProduct = () => {
   const swiperRef = React.useRef<any>(null);
   const [isBeginning, setIsBeginning] = React.useState(true);

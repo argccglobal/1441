@@ -1,14 +1,15 @@
 import React from "react";
 import { Text } from "../ui/Text";
+import { Property } from "@/api/endpoints/properties";
 
-const PropertyCoreDetails = () => {
+const PropertyCoreDetails = ({ property }: { property?: Property }) => {
   return (
     <div className="flex items-center gap-8 flex-wrap">
       {[
-        { value: "5", label: "Bedroom" },
-        { value: "5", label: "Bathrooms" },
-        { value: "5242", label: "Floor Plan" },
-        { value: "667m2", label: "Plot Size" },
+        { value: property?.features?.bedrooms || "-", label: "Bedroom" },
+        { value: property?.features?.bathrooms || "-", label: "Bathrooms" },
+        { value: property?.features?.floorPlanSize || "-", label: "Floor Plan" },
+        { value: property?.landSizeAcres ? `${property.landSizeAcres} acres` : (property?.landSize ? `${property.landSize} ${property.landSizeUnit || 'units'}` : "-"), label: "Plot Size" },
       ].map((item, index) => (
         <div key={index} className="flex flex-col gap-2.5">
           <Text variant={"small"} className="font-bold">

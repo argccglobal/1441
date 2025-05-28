@@ -21,6 +21,10 @@ import useHomeStore, { FeaturedProperties, HomeData } from "@/store/home";
 import { ApiResponse } from "@/api/types";
 import { useEffect, useRef, useState } from "react";
 import PageLoader from "@/components/ui/PageLoader";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import { cn } from "@/utils/classNames";
+import "swiper/css";
 
 export default function Home() {
   const { setHomeData, homeData, isLoading, setLoading } = useHomeStore();
@@ -152,62 +156,6 @@ const ServiceSection = () => {
     </Section>
   );
 };
-
-const propertiesData = [
-  {
-    title: "Properties in London",
-    locations: [
-      "Knightsbridge",
-      "South Kensington",
-      "Belgravia",
-      "Mayfair",
-      "Marylebone / Regents Park",
-      "Primrose Hill",
-      "Richmond",
-      "St Johns Wood",
-    ],
-  },
-  {
-    title: "Properties in Buckinghamshire",
-    locations: [
-      "Beaconsfield",
-      "Chalfont St Giles",
-      "Chalfont St Peter",
-      "Gerrards Cross",
-      "Marlow",
-      "Rickmansworth",
-      "Virginia Water",
-    ],
-  },
-  {
-    title: "Property Types",
-    locations: [
-      "Houses for sale",
-      "Apartments for sale",
-      "Bungalows for sale",
-      "Penthouses for sale",
-      "Land for sale",
-      "Country Homes for sale",
-      "Townhouses for sale",
-      "Villas for sale",
-      "Estates for sale",
-    ],
-  },
-  {
-    title: "Popular Searches",
-    locations: [
-      "Luxury / Penthouse",
-      "Ocean view properties",
-      "Waterfront properties",
-      "Mountain views",
-      "Rural / Country Estate",
-      "City Pad",
-      "Winter chalet",
-      "New Developments",
-      "Sustainable Homes",
-    ],
-  },
-];
 
 const RegionAreaSection = () => {
   const { homeData } = useHomeStore();
@@ -341,6 +289,11 @@ const FeaturedSection = () => {
     // Fetch data from the API
     // getFeaturedProperties
   });
+
+  const swiperRef = useRef<any>(null);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Section bgColor="white" className="!pt-0">
       <div className="flex flex-col gap-12">
@@ -352,65 +305,110 @@ const FeaturedSection = () => {
           </div>
           <Text variant={"body"}>{homeData?.featuredSection?.description}</Text>
         </div>
-        <div className="grid grid-cols-2">
-          <div className="flex flex-col gap-5 justify-between bg-[#F2F4FA] p-8">
-            <div className="flex flex-col gap-5">
-              <Text variant={"card_title_large"}>
-                {featuredPropertiesData[0]?.title}
-              </Text>
-              <Text
-                variant={"small_heading"}
-              >{`${featuredPropertiesData[0]?.location.city}, ${featuredPropertiesData[0]?.location.country}`}</Text>
-              <Text variant={"body"}>
-                {featuredPropertiesData[0]?.description}
-              </Text>
-              <Text variant={"body"}>
-                {`${featuredPropertiesData[0]?.developmentName || ""}`}
-              </Text>
 
-              <Link href="#" className="flex items-center gap-2.5">
-                <Text as="span" variant={"button"}>
-                  More Details
-                </Text>
-                <Icon name="east" className="text-[20px]" />
-              </Link>
-            </div>
-            <div className="border-t pt-5 border-border">
-              <div className="flex items-center gap-8 flex-wrap">
-                {[
-                  {
-                    value:
-                      featuredPropertiesData[0]?.features.bedrooms.toString(),
-                    label: "Bedroom",
-                  },
-                  {
-                    value:
-                      featuredPropertiesData[0]?.features.bathrooms.toString(),
-                    label: "Bathrooms",
-                  },
-                  {
-                    value: featuredPropertiesData[0]?.details.floorPlanSize,
-                    label: "Floor Plan",
-                  },
-                  {
-                    value: `${featuredPropertiesData[0]?.landSize}${featuredPropertiesData[0]?.landSizeUnit}`,
-                    label: "Plot Size",
-                  },
-                ].map((item, index) => (
-                  <div key={index} className="flex flex-col gap-2.5">
-                    <Text variant={"small"} className="font-bold">
-                      {item.value}
-                    </Text>
-                    <Text variant={"small"} className="text-neutral">
-                      {item.label}
-                    </Text>
+        <div className="w-full">
+          <Swiper
+            modules={[Navigation]}
+            className="h-full"
+            slidesPerView={1}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+              setIsBeginning(swiper.isBeginning);
+              setIsEnd(swiper.isEnd);
+            }}
+            onSlideChange={(swiper) => {
+              setIsBeginning(swiper.isBeginning);
+              setIsEnd(swiper.isEnd);
+            }}
+          >
+            {featuredPropertiesData.map((property, index) => (
+              <SwiperSlide key={index}>
+                <div className="w-full">
+                  <div className="grid grid-cols-2">
+                    <div className="flex flex-col gap-5 justify-between bg-[#F2F4FA] p-8">
+                      <div className="flex flex-col gap-5">
+                        <Text variant={"card_title_large"}>
+                          {property?.title}
+                        </Text>
+                        <Text
+                          variant={"small_heading"}
+                        >{`${property?.location.city}, ${property?.location.country}`}</Text>
+                        <Text variant={"body"}>{property?.description}</Text>
+                        <Text variant={"body"}>
+                          {`${property?.developmentName || ""}`}
+                        </Text>
+
+                        <Link href="#" className="flex items-center gap-2.5">
+                          <Text as="span" variant={"button"}>
+                            More Details
+                          </Text>
+                          <Icon name="east" className="text-[20px]" />
+                        </Link>
+                      </div>
+                      <div className="border-t pt-5 border-border">
+                        <div className="flex items-center gap-8 flex-wrap">
+                          {[
+                            {
+                              value: property?.features.bedrooms.toString(),
+                              label: "Bedroom",
+                            },
+                            {
+                              value: property?.features.bathrooms.toString(),
+                              label: "Bathrooms",
+                            },
+                            {
+                              value: property?.details.floorPlanSize || "N/A",
+                              label: "Floor Plan",
+                            },
+                            {
+                              value: `${property?.landSize}${property?.landSizeUnit}`,
+                              label: "Plot Size",
+                            },
+                          ].map((item, idx) => (
+                            <div key={idx} className="flex flex-col gap-2.5">
+                              <Text variant={"small"} className="font-bold">
+                                {item.value}
+                              </Text>
+                              <Text variant={"small"} className="text-neutral">
+                                {item.label}
+                              </Text>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <Image
+                      src={FeaturedImg}
+                      className="h-full"
+                      alt="Featured Image"
+                    />
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        <div className="flex items-center justify-end gap-5">
+          <div
+            onClick={() => swiperRef.current?.slidePrev()}
+            className={cn(
+              "flex cursor-pointer items-center justify-center h-8 w-8 border border-neutralDark",
+              isBeginning ? "opacity-50 cursor-not-allowed" : ""
+            )}
+          >
+            <Icon name="west" className="text-[16px] text-neutralDark" />
           </div>
-
-          <Image src={FeaturedImg} className="h-full" alt="Featured Image" />
+          <div
+            onClick={() => swiperRef.current?.slideNext()}
+            className={cn(
+              "flex cursor-pointer items-center rotate-180 justify-center h-8 w-8 border border-neutralDark",
+              isEnd ? "opacity-50 cursor-not-allowed" : ""
+            )}
+            // className="flex cursor-pointer items-center justify-center h-8 w-8 border border-neutralDark"
+          >
+            <Icon name="west" className="text-[16px] text-neutralDark" />
+          </div>
         </div>
       </div>
     </Section>

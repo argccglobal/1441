@@ -1,7 +1,7 @@
 "use client";
 import Section from "@/components/layout/Section";
 import { Text } from "@/components/ui/Text";
-import React from "react";
+import React, { useEffect } from "react";
 import VectorBottomLeftImg from "@/public/vector_bottom_left.svg";
 import VectorBottomRightImg from "@/public/vector_bottom_right.svg";
 import VectorTopRightImg from "@/public/vector_top_right.svg";
@@ -16,8 +16,16 @@ import BuyingModal from "@/components/Modal/BuyingModal";
 import SellingModal from "@/components/Modal/SellingModal";
 import InvestingModal from "@/components/Modal/InvestingModal";
 import Pagination from "@/components/common/Pagination";
+import { propertiesApi } from "@/api/endpoints/properties";
+import {
+  propertyPageApi,
+  PropertyPageData,
+} from "@/api/endpoints/propertyPage";
+import { usePropertyPageData } from "@/store/propertyDetailsOffcanvas";
 
 const page = () => {
+  const { propertiesPageData } = usePropertyPageData();
+
   const [isOpen, setIsOpen] = React.useState(false);
   const handleSortSelect = () => {
     setIsOpen(!isOpen);
@@ -28,16 +36,76 @@ const page = () => {
     React.useState<boolean>(false);
   const [isOpeInvestingModal, setIsOpeInvestingModal] =
     React.useState<boolean>(false);
+
+  const [properties, setProperties] = React.useState<{
+    data: [];
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      pages: number;
+    };
+  }>({
+    data: [],
+    meta: {
+      total: 0,
+      page: 0,
+      limit: 0,
+      pages: 0,
+    },
+  });
+  // getProperties
+  const fetchProperties = async (params?: any) => {
+    try {
+      const response = await propertiesApi.getProperties(params);
+      setProperties(response?.data);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProperties();
+    // fetchPropertiesContent();
+  }, []);
+
+  const nextPage = () => {
+    if (properties.meta.page < properties.meta.pages) {
+      const params = {
+        page: properties.meta.page + 1,
+        limit: properties.meta.limit,
+      };
+      fetchProperties(params);
+    }
+  };
+  const prevPage = () => {
+    if (properties.meta.page > 1) {
+      const params = {
+        page: properties.meta.page - 1,
+        limit: properties.meta.limit,
+      };
+      fetchProperties(params);
+    }
+  };
+
+  const changePage = (page: number) => {
+    const params = {
+      page: page,
+      limit: properties.meta.limit,
+    };
+    fetchProperties(params);
+  };
+
   return (
     <>
       <Section bgColor="white">
         <div className="flex flex-col gap-20">
           <div className="flex flex-col gap-8">
-            <Text variant={"section_title_normal"}>Properties</Text>
+            <Text variant={"section_title_normal"}>
+              {propertiesPageData?.filterArea.title}
+            </Text>
             <Text variant={"body"}>
-              Lorem ipsum dolor sit amet consectetur. Quisque non id in sit
-              suscipit pellentesque condimentum lorem purus. Purus nibh gravida
-              faucibus ante sed nulla. Mauris massa turpis cursus sit.
+              {propertiesPageData?.filterArea.description}
             </Text>
             <div className="border-t border-border"></div>
           </div>
@@ -128,7 +196,10 @@ const page = () => {
           </div>
           <div className="flex flex-col gap-12">
             <div className="flex items-center gap-5 justify-between">
-              <Text variant={"body"}>Showing 9 of 40 results</Text>
+              <Text variant={"body"}>
+                Showing {properties?.data.length} of {properties?.meta?.total}{" "}
+                results
+              </Text>
               <div className="relative">
                 <div
                   className="flex gap-5 cursor-pointer items-center"
@@ -185,35 +256,37 @@ const page = () => {
               /> */}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-16">
-              <Property />
-              <Property />
-              <Property isBlur />
-              <Property />
-              <Property />
-
-              <Property />
-              <Property />
-
-              <Property />
-              <Property />
+              {properties?.data?.map((item, index) => (
+                <Property
+                  key={index}
+                  isBlur={item?.isPrivate}
+                  property={item}
+                  onClick={() => setIsOpen(true)}
+                />
+              ))}
             </div>
             <div className="flex items-center gap-5">
-              <div className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark">
+              <div
+                onClick={() => prevPage()}
+                className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark"
+              >
                 <Icon name="west" className="text-[16px] text-neutralDark" />
               </div>
-              {/* {[1, 2, 3, 4, 5, "...", 10].map((item) => (
-                <div
-                  key={item}
-                  className={cn(
-                    "flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark",
-                    3 === item ? "bg-neutralDark text-white" : "bg-transparent"
-                  )}
-                >
-                  <Text variant={"small"}>{item}</Text>
-                </div>
-              ))} */}
-              <Pagination currentPage={2} totalPages={18} />
-              <div className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark">
+
+              <Pagination
+                currentPage={properties.meta.page}
+                totalPages={Math.ceil(
+                  properties.meta.total / properties.meta.limit
+                )}
+                onChange={(page) => {
+                  console.log("Page changed:", page);
+                  changePage(page);
+                }}
+              />
+              <div
+                onClick={() => nextPage()}
+                className="flex cursor-pointer items-center justify-center h-10 w-10 border border-neutralDark"
+              >
                 <Icon name="east" className="text-[16px] text-neutralDark" />
               </div>
             </div>

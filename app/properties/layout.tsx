@@ -13,6 +13,11 @@ import { Icon } from "@/components/ui/Icon";
 import BuyingModal from "@/components/Modal/BuyingModal";
 import SellingModal from "@/components/Modal/SellingModal";
 import InvestingModal from "@/components/Modal/InvestingModal";
+import {
+  propertyPageApi,
+  PropertyPageData,
+} from "@/api/endpoints/propertyPage";
+import { usePropertyPageData } from "@/store/propertyDetailsOffcanvas";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +40,25 @@ export default function RootLayout({
     React.useState<boolean>(false);
   const [isOpeInvestingModal, setIsOpeInvestingModal] =
     React.useState<boolean>(false);
+
+  const { setPropertiesPageData, propertiesPageData } = usePropertyPageData();
+
+  const fetchPropertiesContent = async () => {
+    try {
+      const response = await propertyPageApi.getPropertyPageData();
+      // setProperties(response?.data);
+      console.log("response", response);
+      const data: PropertyPageData = response?.data;
+      setPropertiesPageData(data);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchPropertiesContent();
+  }, []);
+
   return (
     <div className="flex flex-col">
       <BuyingModal
@@ -55,11 +79,10 @@ export default function RootLayout({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-16">
             <div className="flex flex-col gap-16">
               <Text variant={"page_title"} className="text-white">
-                Welcome to our Home
+                {propertiesPageData?.hero.title}
               </Text>
               <Text variant={"body"} className="text-white">
-                Lorem ipsum dolor sit amet consectetur. In nisl morbi adipiscing
-                proin amet quis. Augue sem egestas venenatis ac lorem integer.
+                {propertiesPageData?.hero.description}
               </Text>
             </div>
             <div className="flex z-10 flex-col gap-5">

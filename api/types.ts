@@ -30,3 +30,16 @@ export interface QueryParams {
   order?: "asc" | "desc";
   search?: string;
 }
+
+export interface TeamPageContent {
+  title: string;
+  subtitle?: string;
+  description: string;
+  banner?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  sections?: {
+    heading: string;
+    content: string;
+  }[];
+}
