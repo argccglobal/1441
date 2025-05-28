@@ -4,9 +4,21 @@ import {
   ApiResponse,
   PaginatedResponse,
   QueryParams,
+  Testimonial,
 } from "../types";
 
 export const aboutApi = {
+  getTestimonials: async (
+    params?: QueryParams
+  ): Promise<PaginatedResponse<Testimonial>> => {
+    const response = await api.get("/cms/testimonials", { params });
+    return response.data;
+  },
+
+  getAboutPageData: async (): Promise<ApiResponse<AboutPageData>> => {
+    const response = await api.get<ApiResponse<AboutPageData>>("/cms/about");
+    return response.data;
+  },
   updateAboutPageData: async (
     params:
       | "hero"

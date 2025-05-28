@@ -25,14 +25,31 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import Swiper styles
 import "swiper/css";
 import { Navigation } from "swiper/modules";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { aboutApi } from "@/api/endpoints/about";
+import { useAboutPageData } from "@/store/about";
+import { Testimonial } from "@/api/types";
 export default function Home() {
+  const { pageData, setPageData } = useAboutPageData();
+  const fetchAboutPageData = async () => {
+    try {
+      const response = await aboutApi.getAboutPageData();
+      setPageData(response?.data);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAboutPageData();
+  }, []);
+
   return (
     <div className="flex flex-col">
       {/* <Image src={HeroImg} alt="Hero" />
       <TabLinks /> */}
       <AboutArea />
-      <PropertyConsultant />
+      {/* <PropertyConsultant /> */}
       <OurPartners />
       <OurClients />
       <Testimonials />
@@ -42,40 +59,40 @@ export default function Home() {
 }
 
 const AboutArea = () => {
+  const { pageData, setPageData } = useAboutPageData();
   return (
     <Section bgColor="white">
       <div className="flex flex-col items-center gap-20">
         <div className="flex flex-col gap-5 max-w-[600px] items-center text-center">
           <Text variant={"section_title_normal"} className="">
-            Unique Style. Defined
+            {pageData?.hero?.title}
           </Text>
-          <Text variant={"body"}>
-            Our team is built on trust, experience, and integrity. We are
-            relentless, passionate and creative. We love what we do. Take a
-            minute to get to know us. We promise, its worth it
+          <Text variant={"body"} className="text-center">
+            {pageData?.hero?.description}
           </Text>
         </div>
         <div className="w-full flex flex-col gap-12">
-          <Text variant={"section_title_normal"}>About Us</Text>
+          <Text variant={"section_title_normal"}>
+            {pageData?.aboutUs?.title}
+          </Text>
           <div className="flex flex-col gap-8">
             <div className="w-full grid grid-cols-1 md:grid-cols-[auto_500px] gap-16">
-              <ContentSection
-                texts={[
-                  "Lorem ipsum dolor sit amet consectetur. In nisl morbi adipiscing proin amet quis. Augue sem egestas venenatis ac lorem integer. Faucibus nibh ligula magna facilisis. Eu adipiscing sem aliquam porta lorem nunc malesuada. Nulla odio arcu sem magnis faucibus in tortor leo. Mauris nunc imperdiet purus augue nunc.",
-                  "Ullamcorper bibendum quis egestas fringilla mauris. Pellentesque elementum sit gravida aenean. A arcu ut leo velit. Elementum varius ac pellentesque tincidunt id.",
-                  "Egestas diam eget ornare pharetra morbi facilisis tristique ipsum. Fringilla nisi auctor risus lectus etiam sed ultricies. Pellentesque maecenas ut malesuada bibendum tincidunt sit aliquam. Fringilla nec mattis tortor amet egestas in. Arcu mi elementum vulputate auctor amet proin risus. Velit eu consequat diam pharetra.",
-                ]}
-              />
-              <Image src={AboutImg} alt="AboutImg" />
+              {pageData?.aboutUs?.content.length > 0 && (
+                <ContentSection
+                  texts={pageData?.aboutUs?.content.map((text: string) => text)}
+                />
+              )}
+              {pageData?.aboutUs?.image && (
+                <Image
+                  src={pageData?.aboutUs.image}
+                  width={500}
+                  height={500}
+                  className="w-full  h-full"
+                  alt="AboutImg"
+                />
+              )}
             </div>
-            <Text variant={"body"}>
-              Turpis mi sed accumsan quis. Euismod nec nisl ut eget. Nec eu
-              scelerisque proin turpis lacus volutpat id. Vestibulum ac blandit
-              laoreet amet. Penatibus odio viverra sit sed at sit pulvinar
-              lorem. Libero egestas eu urna fermentum. Felis phasellus enim odio
-              metus. Cras vitae et aenean eu faucibus netus. Pretium facilisi
-              ultricies ut bibendum nunc velit massa parturient.
-            </Text>
+            <Text variant={"body"}>{pageData?.aboutUs?.additionalText}</Text>
           </div>
         </div>
       </div>
@@ -133,32 +150,36 @@ const OurPartners = () => {
   );
 };
 const OurClients = () => {
+  const { pageData, setPageData } = useAboutPageData();
+
   return (
     <Section bgColor="white" className="!pt-0">
       <div className="flex flex-col gap-12">
         <div className="flex w-full flex-col gap-12">
-          <Text variant={"section_title_normal"}>Our Clients</Text>
-          <Text variant={"body"}>
-            Lorem ipsum dolor sit amet consectetur. In nisl morbi adipiscing
-            proin amet quis. Augue sem egestas venenatis ac lorem integer.
-            Faucibus nibh ligula magna facilisis. Eu adipiscing sem aliquam
-            porta lorem nunc malesuada. Nulla odio arcu sem magnis faucibus in
-            tortor leo. Mauris nunc imperdiet purus augue nunc.Ullamcorper
-            bibendum quis egestas fringilla mauris. Pellentesque elementum sit
-            gravida aenean. A arcu ut leo velit. Elementum varius ac
-            pellentesque tincidunt id.
+          <Text variant={"section_title_normal"}>
+            {pageData?.clients?.title}
           </Text>
+          <Text variant={"body"}>{pageData?.clients?.description}</Text>
           <div className="flex items-start gap-8 flex-wrap">
-            <div className="flex flex-col gap-2.5 min-w-[109px]">
-              <div className="h-8 flex items-center justify-center w-8 rounded-sm bg-properties">
-                <Icon
-                  name="digital_wellbeing"
-                  className="text-[24px] text-white"
-                />
+            {pageData?.clients?.clientList?.map((client, index) => (
+              // <div key={index} className="flex flex-col gap-2.5">
+              //   <Image src={client?.image} alt="Client" />
+              //   <Text variant={"card_title_small"}>{client?.title}</Text>
+              // </div>
+              <div key={index} className="flex flex-col gap-2.5 min-w-[109px]">
+                <div
+                  className={cn(
+                    "h-8 flex items-center justify-center w-8 rounded-sm"
+                  )}
+                  style={{ backgroundColor: client.bgColor }}
+                >
+                  <Icon name={client.icon} className="text-[24px] text-white" />
+                </div>
+                <Text variant={"card_title_small"}>{client.title}</Text>
               </div>
-              <Text variant={"card_title_small"}>Royal Families</Text>
-            </div>
-            <div className="flex flex-col gap-2.5 min-w-[109px]">
+            ))}
+
+            {/* <div className="flex flex-col gap-2.5 min-w-[109px]">
               <div className="h-8 flex items-center justify-center w-8 rounded-sm bg-team">
                 <Icon name="money_bag" className="text-[24px] text-white" />
               </div>
@@ -190,7 +211,7 @@ const OurClients = () => {
                 />
               </div>
               <Text variant={"card_title_small"}>First Time Buyers</Text>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -202,12 +223,30 @@ const Testimonials = () => {
   const [totalNavigationItem, setTotalNavigationItem] = useState<number>(0);
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const { pageData, setPageData } = useAboutPageData();
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  const fetchTestimonials = async () => {
+    try {
+      const response = await aboutApi.getTestimonials();
+      setTestimonials(response?.data);
+      setTotalNavigationItem(response?.data.length);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
 
   return (
     <Section bgColor="white" className="!pt-0">
       <div className="flex flex-col gap-12">
         <div className="flex w-full flex-col gap-12">
-          <Text variant={"section_title_normal"}>Testimonials</Text>
+          <Text variant={"section_title_normal"}>
+            {pageData?.testimonials.title}
+          </Text>
 
           <Swiper
             modules={[Navigation]}
@@ -226,110 +265,34 @@ const Testimonials = () => {
               console.log("On Change", swiper);
             }}
           >
-            <SwiperSlide>
-              <div className="flex flex-col gap-8 p-8 bg-[#F2F4FA]">
-                <Text variant={"body"}>
-                  Lorem ipsum dolor sit amet consectetur. Fringilla non aenean
-                  arcu vel. Suspendisse massa velit convallis urna ultrices mi.
-                  Ullamcorper neque netus urna integer ac. Ut orci arcu orci
-                  amet imperdiet. Ac eu scelerisque quisque elit cum hendrerit.
-                  Egestas nisl bibendum est ut nullam in condimentum tincidunt
-                  et.
-                </Text>
-                <div className="flex items-center gap-12 justify-between">
-                  <div className="flex flex-col gap-2.5">
-                    <Text
-                      variant={"card_title_small"}
-                      className="text-[#131314]"
-                    >
-                      CEO
-                    </Text>
-                    <Text variant={"small"} className="text-[#131314]">
-                      Airbnb
-                    </Text>
+            {testimonials &&
+              testimonials.length > 0 &&
+              testimonials.map((testimonial, index) => (
+                <SwiperSlide key={index}>
+                  <div className="flex flex-col gap-8 p-8 bg-[#F2F4FA]">
+                    <Text variant={"body"}>{testimonial?.content}</Text>
+                    <div className="flex items-center gap-12 justify-between">
+                      <div className="flex flex-col gap-2.5">
+                        <Text
+                          variant={"card_title_small"}
+                          className="text-[#131314]"
+                        >
+                          {testimonial?.role}
+                        </Text>
+                        <Text variant={"small"} className="text-[#131314]">
+                          {testimonial?.company}
+                        </Text>
+                      </div>
+                      <Image
+                        src={testimonial?.logo}
+                        width={120}
+                        height={80}
+                        alt="Testimonial"
+                      />
+                    </div>
                   </div>
-                  <Image src={AirBnb} alt="AirBnb" />
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="flex flex-col gap-8 p-8 bg-[#F2F4FA]">
-                <Text variant={"body"}>
-                  Lorem ipsum dolor sit amet consectetur. Fringilla non aenean
-                  arcu vel. Suspendisse massa velit convallis urna ultrices mi.
-                  Ullamcorper neque netus urna integer ac. Ut orci arcu orci
-                  amet imperdiet. Ac eu scelerisque quisque elit cum hendrerit.
-                  Egestas nisl bibendum est ut nullam in condimentum tincidunt
-                  et.
-                </Text>
-                <div className="flex items-center gap-12 justify-between">
-                  <div className="flex flex-col gap-2.5">
-                    <Text
-                      variant={"card_title_small"}
-                      className="text-[#131314]"
-                    >
-                      CEO
-                    </Text>
-                    <Text variant={"small"} className="text-[#131314]">
-                      Airbnb
-                    </Text>
-                  </div>
-                  <Image src={AirBnb} alt="AirBnb" />
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="flex flex-col gap-8 p-8 bg-[#F2F4FA]">
-                <Text variant={"body"}>
-                  Lorem ipsum dolor sit amet consectetur. Fringilla non aenean
-                  arcu vel. Suspendisse massa velit convallis urna ultrices mi.
-                  Ullamcorper neque netus urna integer ac. Ut orci arcu orci
-                  amet imperdiet. Ac eu scelerisque quisque elit cum hendrerit.
-                  Egestas nisl bibendum est ut nullam in condimentum tincidunt
-                  et.
-                </Text>
-                <div className="flex items-center gap-12 justify-between">
-                  <div className="flex flex-col gap-2.5">
-                    <Text
-                      variant={"card_title_small"}
-                      className="text-[#131314]"
-                    >
-                      CEO
-                    </Text>
-                    <Text variant={"small"} className="text-[#131314]">
-                      Airbnb
-                    </Text>
-                  </div>
-                  <Image src={AirBnb} alt="AirBnb" />
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="flex flex-col gap-8 p-8 bg-[#F2F4FA]">
-                <Text variant={"body"}>
-                  Lorem ipsum dolor sit amet consectetur. Fringilla non aenean
-                  arcu vel. Suspendisse massa velit convallis urna ultrices mi.
-                  Ullamcorper neque netus urna integer ac. Ut orci arcu orci
-                  amet imperdiet. Ac eu scelerisque quisque elit cum hendrerit.
-                  Egestas nisl bibendum est ut nullam in condimentum tincidunt
-                  et.
-                </Text>
-                <div className="flex items-center gap-12 justify-between">
-                  <div className="flex flex-col gap-2.5">
-                    <Text
-                      variant={"card_title_small"}
-                      className="text-[#131314]"
-                    >
-                      CEO
-                    </Text>
-                    <Text variant={"small"} className="text-[#131314]">
-                      Airbnb
-                    </Text>
-                  </div>
-                  <Image src={AirBnb} alt="AirBnb" />
-                </div>
-              </div>
-            </SwiperSlide>
+                </SwiperSlide>
+              ))}
           </Swiper>
 
           <div className="flex items-center justify-center gap-5">
@@ -350,25 +313,36 @@ const Testimonials = () => {
   );
 };
 const OurValues = () => {
+  const { pageData, setPageData } = useAboutPageData();
+
   return (
     <Section bgColor="[#181818]" fluid>
       <div className="flex flex-col gap-12">
         <div className="container">
           <div className="flex flex-col gap-12">
             <Text variant={"section_title_normal"} className="text-white">
-              Our Values
+              {pageData?.values?.title}
             </Text>
             <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-12">
-              <div className="flex flex-col gap-5">
-                <Text variant={"card_title_small"} className="text-properties">
-                  Bespoke
-                </Text>
-                <Text variant={"body"} className="text-white">
-                  Lorem ipsum dolor sit amet consectetur. In nisl morbi
-                  adipiscing proin amet quis.
-                </Text>
-              </div>
-              <div className="flex flex-col gap-5">
+              {pageData?.values &&
+                pageData?.values.items.length > 0 &&
+                pageData?.values.items.map((value, index) => (
+                  <div key={index} className="flex flex-col gap-5">
+                    <Text
+                      variant={"card_title_small"}
+                      // className="text-properties"
+                      style={{ color: value.color }}
+                    >
+                      Bespoke
+                    </Text>
+                    <Text variant={"body"} className="text-white">
+                      Lorem ipsum dolor sit amet consectetur. In nisl morbi
+                      adipiscing proin amet quis.
+                    </Text>
+                  </div>
+                ))}
+
+              {/* <div className="flex flex-col gap-5">
                 <Text variant={"card_title_small"} className="text-team">
                   Over & Above
                 </Text>
@@ -394,7 +368,7 @@ const OurValues = () => {
                   Lorem ipsum dolor sit amet consectetur. In nisl morbi
                   adipiscing proin amet quis.
                 </Text>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -412,7 +386,7 @@ const OurValues = () => {
               backgroundClip: "text",
             }}
           >
-            BONDS
+            {pageData?.values?.brandText}
           </h1>
         </div>
       </div>

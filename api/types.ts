@@ -122,7 +122,7 @@ export interface PartnersSection {
 }
 
 export interface ClientType {
-  name: string;
+  title: string;
   isActive?: boolean;
   displayOrder?: number;
   icon?: string;
@@ -132,7 +132,7 @@ export interface ClientType {
 export interface ClientsSection {
   title: string;
   description: string;
-  clientTypes: ClientType[];
+  clientList: ClientType[];
 }
 
 export interface Testimonial {
