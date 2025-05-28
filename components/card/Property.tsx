@@ -62,7 +62,12 @@ const Property = ({
       ) : (
         <div className="">
           <Image
-            src={property.media.featuredPhoto && property.media.featuredPhoto.length > 0 ? property.media.featuredPhoto[0] : PropertyImg.src}
+            src={
+              property.media.featuredPhoto &&
+              property.media.featuredPhoto.length > 0
+                ? property.media.featuredPhoto[0]
+                : PropertyImg.src
+            }
             width={600}
             alt="property"
             height={250}
@@ -105,8 +110,18 @@ const Property = ({
           {[
             { value: property.features.bedrooms || "-", label: "Bedroom" },
             { value: property.features.bathrooms || "-", label: "Bathrooms" },
-            { value: property.features.floorPlanSize || "-", label: "Floor Plan" },
-            { value: property.landSizeAcres ? `${property.landSizeAcres} acres` : (property.landSize ? `${property.landSize} ${property.landSizeUnit || 'units'}` : "-"), label: "Plot Size" },
+            {
+              value: property.features.floorPlanSize || "-",
+              label: "Floor Plan",
+            },
+            {
+              value: property.landSizeAcres
+                ? `${property.landSizeAcres} acres`
+                : property.landSize
+                ? `${property.landSize} ${property.landSizeUnit || "units"}`
+                : "-",
+              label: "Plot Size",
+            },
           ].map((item, index) => (
             <div key={index} className="flex flex-col gap-2.5">
               <Text variant={"small"} className="font-bold">
