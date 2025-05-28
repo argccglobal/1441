@@ -18,10 +18,10 @@ const Member = ({ team }: { team: Team }) => {
     <>
       <div className="flex flex-col gap-5">
         <Image
-          className="w-full"
+          className="w-full h-[180px] object-cover"
           // fill
           width={300}
-          height={300}
+          height={180}
           src={team.profileImage}
           alt="Team Member"
         />

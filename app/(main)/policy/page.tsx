@@ -5,13 +5,19 @@ import TabLinks from "@/components/TabLinks";
 import Section from "@/components/layout/Section";
 import { Text } from "@/components/ui/Text";
 import ServiceCard from "@/components/common/ServiceCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/utils/classNames";
 import ContentSection from "@/components/common/ContentSection";
 import { Icon } from "@/components/ui/Icon";
 import { Divider } from "@/components/ui/Divider";
 import SideTabBtn from "@/components/SideTabBtn";
+import { usePolicyStore } from "@/store/policy";
 export default function Home() {
+  const { getPolicies, policies } = usePolicyStore();
+
+  useEffect(() => {
+    getPolicies();
+  }, []);
   return (
     <div className="flex relative flex-col">
       {/* <Image src={HeroImg} alt="Hero" /> */}
@@ -24,6 +30,21 @@ export default function Home() {
 
 const Policy = () => {
   const [activeTab, setActiveTab] = useState("Privacy Policy");
+  const [activeCategoryContent, setActiveCategoryContent] = useState<{
+    title: string;
+    content: string[];
+  }>({
+    title: "",
+    content: [],
+  });
+  const { policies } = usePolicyStore();
+  console.log("policies", policies);
+
+  const handleActiveCtg = (category: string, content: any) => {
+    setActiveTab(category);
+    setActiveCategoryContent(content);
+  };
+
   return (
     <Section bgColor="white" className="!py-20">
       <div className="grid items-start grid-cols-1 sm:grid-cols-[300px_auto] gap-12">
@@ -33,18 +54,34 @@ const Policy = () => {
               Categories
             </Text>
           </div>
-          <div
-            onClick={() => setActiveTab("Compliance")}
-            className={cn(
-              "px-8 cursor-pointer py-[30px] border-y border-neutralDark hover:bg-[#E7E7E7]",
-              activeTab === "Compliance" ? "bg-[#E7E7E7]" : ""
-            )}
-          >
-            <Text variant={"card_title_large"} className="">
-              Compliance
-            </Text>
-          </div>
-          <div
+          {policies.map((policy, index) => (
+            <div
+              key={index}
+              onClick={() =>
+                handleActiveCtg(policy.category, {
+                  title: policy.title,
+                  content: policy.content,
+                })
+              }
+              className={cn(
+                "px-8 cursor-pointer py-[30px] border-neutralDark hover:bg-[#E7E7E7]",
+                policy.category
+                  ? activeTab === policy.category
+                    ? "bg-[#E7E7E7]"
+                    : ""
+                  : index == 0
+                  ? "bg-[#E7E7E7]"
+                  : "",
+                index === 0 ? "" : "border-t"
+              )}
+            >
+              <Text variant={"card_title_large"} className="">
+                {policy.category}
+              </Text>
+            </div>
+          ))}
+
+          {/* <div
             onClick={() => setActiveTab("Terms of Business")}
             className={cn(
               "px-8 cursor-pointer py-[30px] border-b border-neutralDark hover:bg-[#E7E7E7]",
@@ -65,21 +102,27 @@ const Policy = () => {
             <Text variant={"card_title_large"} className="">
               Privacy Policy
             </Text>
+          </div> */}
+        </div>
+        <div className="flex flex-col gap-12">
+          <Text variant={"section_title_normal"}>
+            {activeCategoryContent.title}
+          </Text>
+
+          <div className="flex flex-col gap-8">
+            {activeCategoryContent.content.map(
+              (content: string, index) =>
+                content && (
+                  <Text
+                    key={index}
+                    variant="body"
+                    className={"text-neutral"}
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
+                )
+            )}
           </div>
         </div>
-        {activeTab === "Privacy Policy" && (
-          <div className="flex flex-col gap-12">
-            <Text variant={"section_title_normal"}>Data & Privacy Policy</Text>
-            <ContentSection
-              texts={[
-                "Lorem ipsum dolor sit amet consectetur. Dolor facilisi gravida varius ultrices eget gravida sollicitudin. Proin sit ultricies diam arcu urna viverra aenean eget. Nibh lacus consectetur et vitae. Purus enim at in neque maecenas. Augue molestie fames sit et proin arcu mauris. Urna aliquam nunc quam pharetra malesuada interdum eget eleifend eu.",
-                "Elementum tempor ultrices sem id et cursus vitae. Volutpat tempor pellentesque morbi arcu proin quam sagittis leo. Convallis amet justo sed sollicitudin nunc sapien adipiscing enim. Dolor tellus nibh maecenas et in ac sed varius. Gravida semper sem diam sapien facilisi proin. Magna fringilla blandit lacus dui est feugiat amet nec. Sit id lorem arcu dictum urna facilisis rhoncus magna. Gravida fringilla sagittis ut est nunc eget eu consectetur. At quis nunc pharetra ac.",
-                "Eget at eleifend gravida massa velit. Odio sit ac rhoncus pretium. Adipiscing nunc tristique mauris cursus neque ullamcorper mollis proin. Nascetur platea proin id integer ac lectus consectetur malesuada vitae. Tristique dolor aliquet a ipsum habitant amet nibh molestie pulvinar. Gravida egestas facilisis ipsum praesent interdum gravida molestie aenean. Faucibus urna eleifend ut sit sem.",
-                "Fames et lacus auctor amet sit. Tortor nisl ullamcorper malesuada laoreet amet leo cursus augue. Euismod faucibus amet quam laoreet interdum pretium. Risus hac gravida turpis volutpat feugiat ac. Penatibus arcu netus praesent semper vel. Netus a dignissim varius metus laoreet integer vel. Curabitur commodo velit curabitur molestie nibh erat aliquet.",
-              ]}
-            />
-          </div>
-        )}
       </div>
     </Section>
   );

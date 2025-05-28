@@ -29,6 +29,10 @@ import { useEffect, useRef, useState } from "react";
 import { aboutApi } from "@/api/endpoints/about";
 import { useAboutPageData } from "@/store/about";
 import { Testimonial } from "@/api/types";
+import { Team } from "@/api/endpoints/teams";
+import { useMemberDetailsOffcanvas } from "@/store/memberDetailsOffcanvas";
+import MemberDetailsOffcanvas from "@/components/OffCanvas/MemberDetailsOffCanvas";
+import Overlay from "@/components/common/Overlay";
 export default function Home() {
   const { pageData, setPageData } = useAboutPageData();
   const fetchAboutPageData = async () => {
@@ -49,7 +53,7 @@ export default function Home() {
       {/* <Image src={HeroImg} alt="Hero" />
       <TabLinks /> */}
       <AboutArea />
-      {/* <PropertyConsultant /> */}
+      <PropertyConsultant />
       <OurPartners />
       <OurClients />
       <Testimonials />
@@ -100,17 +104,30 @@ const AboutArea = () => {
   );
 };
 const PropertyConsultant = () => {
+  const { pageData, setPageData } = useAboutPageData();
+  const { isOpenCanvas, closeCanvas, openCanvas } = useMemberDetailsOffcanvas();
+
   return (
     <Section bgColor="white" className="!pt-0">
+      {isOpenCanvas && <Overlay setAction={closeCanvas} />}
+      <MemberDetailsOffcanvas />
       <div className="flex flex-col gap-12">
         <div className="flex w-full flex-col gap-12">
-          <Text variant={"section_title_normal"}>Property Consultants</Text>
+          <Text variant={"section_title_normal"}>
+            {pageData?.consultants.title}
+          </Text>
           <div className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-12">
             {
               // 12 item repeted member
-              Array.from({ length: 4 }).map((_, index) => (
-                <Member key={index} />
-              ))
+              pageData?.consultants.team &&
+                pageData?.consultants.team.map(
+                  (
+                    team: {
+                      teamId: Team;
+                    },
+                    index
+                  ) => <Member team={team.teamId} key={index} />
+                )
             }
           </div>
           <div className="flex justify-end">

@@ -1,3 +1,5 @@
+import { Team } from "./endpoints/teams";
+
 // API Response Types
 export interface ApiResponse<T> {
   data: T;
@@ -104,18 +106,30 @@ export interface AboutUsSection {
 }
 
 export interface TeamMember {
-  _id: number;
-  name: string;
-  role: string;
-  image: string;
+  teamId: Team;
+  _id?: string;
 }
 
 export interface ConsultantsSection {
   title: string;
-  team: TeamMember[];
+  team: Team[];
   seeAllLink: string;
 }
+interface ServiceSection {
+  title: string;
+  description: string;
+}
 
+interface ctaSection {
+  title: string;
+  description: string;
+  button_text: string;
+  button_link: string;
+}
+export interface ServicePageData {
+  service: ServiceSection;
+  cta: ctaSection;
+}
 export interface PartnersSection {
   title: string;
   logos: string[];
