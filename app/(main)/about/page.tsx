@@ -350,11 +350,10 @@ const OurValues = () => {
                       // className="text-properties"
                       style={{ color: value.color }}
                     >
-                      Bespoke
+                      {value.title}
                     </Text>
                     <Text variant={"body"} className="text-white">
-                      Lorem ipsum dolor sit amet consectetur. In nisl morbi
-                      adipiscing proin amet quis.
+                      {value.description}
                     </Text>
                   </div>
                 ))}
