@@ -118,13 +118,23 @@ const ProjectsContent = () => {
 
   return (
     <div className="flex flex-col">
-      {selectedMember?.projects.map((project, index) => (
+      {selectedMember?.soldProperties.map((project, index) => (
         <div key={index} className="flex items-start gap-1">
           <div className="h-6 w-6 flex items-center justify-center">
             <div className="h-1.5 w-1.5 rounded-full bg-neutralDark"></div>
           </div>
           <Text variant={"body"}>
-            <b>{project.name}</b> – {project.description}
+            <b>{project.title}</b> – {project.description}
+          </Text>
+        </div>
+      ))}
+      {selectedMember?.activeListings.map((project, index) => (
+        <div key={index} className="flex items-start gap-1">
+          <div className="h-6 w-6 flex items-center justify-center">
+            <div className="h-1.5 w-1.5 rounded-full bg-neutralDark"></div>
+          </div>
+          <Text variant={"body"}>
+            <b>{project.title}</b> – {project.description}
           </Text>
         </div>
       ))}

@@ -34,6 +34,7 @@ interface RegionSection {
   _id: string;
   title: string;
   isActive: boolean;
+  description: string;
 }
 
 interface FeaturedSection {

@@ -8,15 +8,25 @@ const PropertyCoreDetails = ({ property }: { property?: Property }) => {
       {[
         { value: property?.features?.bedrooms || "-", label: "Bedroom" },
         { value: property?.features?.bathrooms || "-", label: "Bathrooms" },
-        { value: property?.features?.floorPlanSize || "-", label: "Floor Plan" },
-        { value: property?.landSizeAcres ? `${property.landSizeAcres} acres` : (property?.landSize ? `${property.landSize} ${property.landSizeUnit || 'units'}` : "-"), label: "Plot Size" },
+        {
+          value: `${property?.details?.floorPlanSize}` || "-",
+          label: "Floor Plan",
+        },
+        {
+          value: `${property?.details?.landSize} ${property?.details?.landSizeUnit}`,
+          label: "Plot Size",
+        },
       ].map((item, index) => (
         <div key={index} className="flex flex-col gap-2.5">
           <Text variant={"small"} className="font-bold">
             {item.value}
+            {
+              // Floor Plan
+              item.label === "Floor Plan" && <sup>2</sup>
+            }
           </Text>
           <Text variant={"small"} className="text-neutral">
-            {item.label}
+            {item.label}{" "}
           </Text>
         </div>
       ))}

@@ -17,6 +17,8 @@ import { Text } from "../ui/Text";
 // import { Icon } from "./Icon";
 // import { footerSocialShareItems } from "../../data/social";
 import Logo from "@/public/logo_white.svg";
+import { useFooterStore } from "@/store/footer";
+import useHeaderStore from "@/store/header";
 interface FooterProps {
   topDescription?: string;
   bottomDescription?: string;
@@ -261,6 +263,16 @@ export const Footer: React.FC<FooterProps> = ({
       ],
     },
   ];
+
+  const { getFooter, footer } = useFooterStore();
+  useEffect(() => {
+    getFooter();
+  }, []);
+
+  console.log(footer);
+
+  const { headerData } = useHeaderStore();
+
   return (
     <div className=" relative">
       {isVisible === true && (
@@ -289,29 +301,29 @@ export const Footer: React.FC<FooterProps> = ({
                 <Image
                   alt="logo"
                   className="mb-8"
-                  src={Logo}
+                  src={footer?.footerLogo ? footer?.footerLogo : Logo}
                   width={114}
                   height={50}
                 />
               </Link>
               <div className="grid grid-cols-1 gap-y-8 md:grid-cols-[370px_auto] justify-between items-start">
                 <Text variant={"small"} className="text-white">
-                  Properties & Investments
+                  {headerData?.title}
                 </Text>
                 <div className="flex gap-20 flex-wrap justify-between items-start">
-                  {footerMenu.map((item, index) => (
+                  {footer?.linkCategories.map((item, index) => (
                     <div key={index} className="flex flex-col gap-8">
                       <Text
                         variant={"footer_menu_title"}
                         className="text-white"
                       >
-                        {item.title}
+                        {item.label}
                       </Text>
                       <div className="flex flex-col gap-5">
                         {item.links.map((link, index) => (
                           <Link key={index} href={link.href}>
                             <Text variant={"button"} className="text-white">
-                              {link.title}
+                              {link.label}
                             </Text>
                           </Link>
                         ))}
@@ -326,7 +338,7 @@ export const Footer: React.FC<FooterProps> = ({
                 Newsletter
               </Text> */}
                   <Text variant={"small"} className="max-w-[370px] text-white">
-                    Get our emails on inspiration & tips to grow your business
+                    {footer?.emailSubscriptionLabel}
                   </Text>
                   {/* <SmallText color="white">
                 Get our emails on inspiration & tips to grow your business
@@ -346,32 +358,28 @@ Instagram
 LinkedIn
 YouTube */}
               <div className="flex items-center gap-5">
-                {["Facebook", "Instagram", "LinkedIn", "YouTube"].map(
-                  (item, index) => (
-                    <Text
-                      key={index}
-                      variant={"button"}
-                      className="text-white cursor-pointer"
-                    >
-                      {item}
-                    </Text>
-                  )
-                )}
-              </div>
-              <div className="flex items-center gap-8">
-                {["Contact Us", "Data & Cookies Policy"].map((item, index) => (
+                {footer?.socialMediaItems.map((item, index) => (
                   <Text
                     key={index}
                     variant={"button"}
                     className="text-white cursor-pointer"
                   >
-                    {item}
+                    {item.name}
                   </Text>
+                ))}
+              </div>
+              <div className="flex items-center gap-8">
+                {footer?.additionalLinks?.map((item, index) => (
+                  <Link key={index} href={item.href}>
+                    <Text variant={"button"} className="text-white">
+                      {item.label}
+                    </Text>
+                  </Link>
                 ))}
               </div>
             </div>
             <Text variant={"extra_small"} className="text-white">
-              1441 a G.C.C. Limited Company ©All rights reserved 2025
+              {footer?.copyright}
             </Text>
           </div>
         </div>

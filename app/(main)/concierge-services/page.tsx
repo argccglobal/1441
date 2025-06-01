@@ -9,11 +9,13 @@ import { ServiceType, useServicePageStore } from "@/store/servicePage";
 import { useEffect } from "react";
 import { HaveQuestions } from "../tenancy-services/page";
 export default function Home() {
-  const { pageData, getServicePageData } = useServicePageStore();
+  const { pageData, getServicePageData, services } = useServicePageStore();
 
   useEffect(() => {
     getServicePageData(ServiceType.CONCIERGE);
   }, []);
+
+  console.log("services", services);
 
   console.log(pageData);
   return (
@@ -27,8 +29,7 @@ export default function Home() {
 }
 
 const ConciergeService = () => {
-  const { pageData } = useServicePageStore();
-
+  const { pageData, services } = useServicePageStore();
   return (
     <Section className="" bgColor="white">
       {/* Concierge Services
@@ -41,8 +42,8 @@ const ConciergeService = () => {
           <Text variant={"body"}>{pageData?.service.description}</Text>
         </div>
         <div className="grid grid-cols-4 gap-x-8 gap-y-12">
-          {Array.from({ length: 8 }).map((_, index) => {
-            return <ServiceCard />;
+          {services.map((service, index) => {
+            return <ServiceCard service={service} />;
           })}
         </div>
       </div>

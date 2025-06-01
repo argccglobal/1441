@@ -55,7 +55,7 @@ const Header = () => {
           </div>
           <div className="flex flex-col items-center gap-2.5">
             <Image
-              className="max-h-[20px] w-auto"
+              className="h-[16px]"
               width={60}
               height={20}
               src={headerData?.logo || LogoImg}

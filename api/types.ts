@@ -240,12 +240,12 @@ export interface Vacancy {
 }
 
 export interface ContactPageData {
-  contactSection: ContactSection;
-  officeSection: OfficeSection;
-  regions: Region[];
-  countries: Country[];
-  offices: Office[];
-  vacancies: Vacancy[];
+  contactSection?: ContactSection;
+  officeSection?: OfficeSection;
+  regions?: Region[];
+  countries?: Country[];
+  offices?: Office[];
+  vacancies?: Vacancy[];
 }
 
 export interface Contact {
@@ -334,4 +334,180 @@ export interface TeamPageContent {
     heading: string;
     content: string;
   }[];
+}
+
+export interface Policy {
+  _id: string;
+  title: string;
+  category: string;
+  content: string[];
+  isActive: boolean;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FormErrors {
+  title?: string;
+  category?: string;
+  content?: string;
+}
+
+export interface ContactSection {
+  title: string;
+  description: string;
+  anchors: {
+    href_text: string;
+    href: string;
+  }[];
+  cta_items: {
+    title: string;
+    description: string;
+    button_text: string;
+    button_link: string;
+  }[];
+}
+
+export interface OfficeSection {
+  title: string;
+  image_url: string;
+}
+
+export interface Region {
+  _id?: string;
+  region_name: string;
+}
+
+export interface Country {
+  _id?: string;
+  country_name: string;
+  region_id: string;
+}
+
+export interface Office {
+  _id?: string;
+  address_line_one: string;
+  address_line_two: string;
+  po_box_text: string;
+  telephone: string;
+  working_hours_text: string;
+  latitude: number;
+  longitude: number;
+  region_id: string;
+  country_id: string;
+  vacancy_section_title: string;
+  vacancy_section_description: string;
+}
+
+export interface Vacancy {
+  _id?: string;
+  title: string;
+  description: string;
+  link: string;
+  is_published: boolean;
+  office_id: string;
+}
+// Footer data types
+export interface FooterLink {
+  _id?: string;
+  label: string;
+  href: string;
+}
+
+export interface LinkCategory {
+  _id?: string;
+  label: string;
+  links: FooterLink[];
+}
+
+export interface SocialMediaItem {
+  _id?: string;
+  name: string;
+  link: string;
+  icon: string;
+}
+
+export interface Footer {
+  _id?: string;
+  footerLogo?: string;
+  footerLogoFile?: File | null;
+  copyright?: string;
+  emailSubscriptionLabel?: string;
+  linkCategories: LinkCategory[];
+  socialMediaItems: SocialMediaItem[];
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  additionalLinks?: AdditionalLink[];
+}
+
+export interface AdditionalLink {
+  _id: string;
+  label: string;
+  href: string;
+}
+
+export interface FooterProps {
+  topDescription?: string;
+  bottomDescription?: string;
+  copyright?: string;
+}
+
+export interface FormErrors {
+  footerLogo?: string;
+  copyright?: string;
+  emailSubscriptionLabel?: string;
+  // Add other error fields as needed
+}
+// Footer data types
+export interface FooterLink {
+  _id?: string;
+  label: string;
+  href: string;
+}
+
+export interface LinkCategory {
+  _id?: string;
+  label: string;
+  links: FooterLink[];
+}
+
+export interface SocialMediaItem {
+  _id?: string;
+  name: string;
+  link: string;
+  icon: string;
+}
+
+export interface Footer {
+  _id?: string;
+  footerLogo?: string;
+  footerLogoFile?: File | null;
+  copyright?: string;
+  emailSubscriptionLabel?: string;
+  linkCategories: LinkCategory[];
+  socialMediaItems: SocialMediaItem[];
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  additionalLinks?: AdditionalLink[];
+}
+
+export interface AdditionalLink {
+  _id: string;
+  label: string;
+  href: string;
+}
+
+export interface FooterProps {
+  topDescription?: string;
+  bottomDescription?: string;
+  copyright?: string;
+}
+
+export interface FormErrors {
+  footerLogo?: string;
+  copyright?: string;
+  emailSubscriptionLabel?: string;
+  // Add other error fields as needed
 }

@@ -34,6 +34,14 @@ export interface Features {
   floorPlanSize: number;
   amenities: string[];
   plotSizeUnit: string;
+  hasGarden: boolean;
+  hasParking: boolean;
+  hasCentralHeating: boolean;
+  hasSwimmingPool: boolean;
+  moreFeatures?: {
+    name: string;
+    isExist: string;
+  }[];
 }
 
 export interface Landmark {

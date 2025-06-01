@@ -25,7 +25,7 @@ export default function Home() {
 }
 
 const ConciergeService = () => {
-  const { pageData } = useServicePageStore();
+  const { pageData, services } = useServicePageStore();
   return (
     <Section className="" bgColor="white">
       {/* Concierge Services
@@ -40,8 +40,8 @@ const ConciergeService = () => {
           </Text>
         </div>
         <div className="grid grid-cols-4 gap-x-8 gap-y-12">
-          {Array.from({ length: 8 }).map((_, index) => {
-            return <ServiceCard />;
+          {services.map((service, index) => {
+            return <ServiceCard service={service} />;
           })}
         </div>
       </div>

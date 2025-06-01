@@ -3,12 +3,12 @@ import React from "react";
 import { Text } from "../ui/Text";
 import ServiceImg from "@/public/service.png";
 
-const ServiceCard = () => {
+const ServiceCard = ({ service }: { service: any }) => {
   return (
     <div className="flex flex-col gap-5">
-      <Image src={ServiceImg} alt="Service" />
+      <Image src={service.image} width={260} height={160} alt="Service" />
       <Text variant={"body"} className="!font-normal">
-        Estate Planning & Investments
+        {service.title}
       </Text>
     </div>
   );

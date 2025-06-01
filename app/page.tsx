@@ -254,7 +254,7 @@ const RegionAreaSection = () => {
             <Text variant={"section_title_normal"}>{country.name}</Text>
             <Icon name="keyboard_arrow_down" className="text-[24px]" />
           </div>
-          <Text variant={"body"}>{homeData?.regionSection.title}</Text>
+          <Text variant={"body"}>{homeData?.regionSection.description}</Text>
         </div>
         <div className="grid grid-cols-4 gap-8">
           {regionAreas.map((item, index) => (
@@ -357,17 +357,21 @@ const FeaturedSection = () => {
                               label: "Bathrooms",
                             },
                             {
-                              value: property?.details.floorPlanSize || "N/A",
+                              value: property?.details?.floorPlanSize || "N/A",
                               label: "Floor Plan",
                             },
                             {
-                              value: `${property?.landSize}${property?.landSizeUnit}`,
+                              value: `${property?.details?.landSize} ${property?.details?.landSizeUnit}`,
                               label: "Plot Size",
                             },
                           ].map((item, idx) => (
                             <div key={idx} className="flex flex-col gap-2.5">
                               <Text variant={"small"} className="font-bold">
                                 {item.value}
+                                {
+                                  // Floor Plan
+                                  item.label === "Floor Plan" && <sup>2</sup>
+                                }
                               </Text>
                               <Text variant={"small"} className="text-neutral">
                                 {item.label}

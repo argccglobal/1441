@@ -43,6 +43,7 @@ import ContentSection from "@/components/common/ContentSection";
 import SearchSelect from "@/components/ui/SearchSelect";
 import TabLinks from "@/components/TabLinks";
 import EarthImg from "@/public/earth.svg";
+import { useContactStore } from "@/store/contact";
 
 const schema = z.object({
   name: z.string().min(3).max(50),
@@ -66,6 +67,14 @@ const Page = () => {
   } = useForm<Schema>({
     resolver: zodResolver(schema),
   });
+
+  const { getContactData, contactData } = useContactStore();
+
+  useEffect(() => {
+    getContactData();
+  }, []);
+
+  console.log("contactData", contactData);
 
   // const getCountryList = UseCountry((state) => state.getCountryList);
   // const countryList = UseCountry((state) => state.countryList);
@@ -481,64 +490,54 @@ const OurOffices = ({
     title: string;
   }[];
 }) => {
+  const { contactData } = useContactStore();
   return (
     <Section bgColor="white" className="!py-20">
       <div className="flex flex-col gap-16">
         <Text variant={"section_title_normal"}>
           {/* {data.title} */}
-          We{"’"}re here for you
+          {contactData?.contactSection?.title}
         </Text>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div className="flex  gap-7 flex-col justify-between">
             <Text variant={"body"} className="line-clamp-3">
-              {data.description}
+              {contactData?.contactSection?.description}
             </Text>
             <Divider type="horizontal" className="h-px" />
-            {data.anchors.map(
-              (anchor: { href_text: string; href: string; _id: string }) => (
-                <>
-                  <LinkText
-                    type="text"
-                    icon="east"
-                    href={anchor.href}
-                    iconPosition="right"
-                    textColor="primary"
-                    className="cursor-pointer uppercase"
-                    label={anchor.href_text}
-                  />
-                  <Divider type="horizontal" className="h-px" />
-                </>
-              )
-            )}
+            {contactData?.contactSection?.anchors.map((anchor) => (
+              <>
+                <LinkText
+                  type="text"
+                  icon="east"
+                  href={anchor.href}
+                  iconPosition="right"
+                  textColor="primary"
+                  className="cursor-pointer uppercase"
+                  label={anchor.href_text}
+                />
+                <Divider type="horizontal" className="h-px" />
+              </>
+            ))}
           </div>
-          {cta.map((item, index: number) => (
+          {contactData?.contactSection?.cta_items.map((item, index: number) => (
             <div
               key={index}
               className="p-8 flex gap-8 flex-col justify-between border-border border"
             >
               <div className="flex flex-col gap-5">
-                <Text variant={"card_title_large"}>Follow Us</Text>
+                <Text variant={"card_title_large"}>{item.title}</Text>
                 <Text variant={"body"} className="line-clamp-4">
-                  Proin turpis volutpat integer quam. Viverra nec id id ipsum.
-                  Et eu interdum vitae in pellentesque id. Felis nullam placerat
-                  vitae at lacinia urna egestas sed facilisis. Dignissim aliquet
-                  id ipsum malesuada. Dolor id egestas diam dui in nibh.
-                  Fringilla praesent fermentum leo praesent morbi viverra.
-                  Imperdiet posuere neque mattis purus neque at eu. Magna
-                  malesuada tincidunt id facilisis vel aliquam rhoncus magna.
-                  Tellus cursus mauris risus tortor. Pretium consequat volutpat
-                  tortor tincidunt. Tincidunt risus sed semper sollicitudin
-                  sociis fusce lectus nisl.
+                  {item.description}
                 </Text>
               </div>
               <LinkText
                 type="text"
                 icon="east"
-                // href={`mailto:${ADMIN_EMAIL}`}
+                href={item.button_link}
                 iconPosition="right"
                 textColor="primary"
                 className="cursor-pointer mt-auto "
-                label={"Button Title"}
+                label={item.button_text}
               />
             </div>
           ))}

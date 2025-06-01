@@ -86,6 +86,8 @@ const Page = () => {
     fetchPropertyDetails();
   }, [slug]);
 
+  const [seAllFeatures, setSeAllFeatures] = useState<boolean>(false);
+
   return (
     <>
       {activeTab && <PropertyOffcanvas data={propertyDetails} />}
@@ -452,33 +454,51 @@ const Page = () => {
                   <div className="flex flex-col gap-8">
                     <div className="flex items-center flex-wrap w-full gap-y-5">
                       {[
-                        "Garden",
-                        "Garage",
-                        "Walk In Closet",
-                        "Indoor Pool",
-                        "Sauna",
-                        "Mansion",
+                        propertyDetails?.features.hasCentralHeating &&
+                          "Central Heating",
+                        propertyDetails?.features.hasGarden && "Garden",
+                        propertyDetails?.features.hasParking && "Parking",
+                        propertyDetails?.features.hasSwimmingPool &&
+                          "Swimming Pool",
                       ].map((item, index) => (
                         <Text
                           key={index}
                           variant={"small"}
                           className="flex-[1/2] w-1/2 Garden"
                         >
-                          Garden
+                          {item}
                         </Text>
                       ))}
+                      {seAllFeatures &&
+                        propertyDetails?.features?.moreFeatures &&
+                        propertyDetails?.features?.moreFeatures.map(
+                          (item, index) => (
+                            <Text
+                              key={index}
+                              variant={"small"}
+                              className="flex-[1/2] w-1/2 Garden"
+                            >
+                              {item.name} Name
+                            </Text>
+                          )
+                        )}
                     </div>
-                    <Link
-                      href={"/"}
-                      className={cn(
-                        textVariants({
-                          variant: "button",
-                        }),
-                        "underline cursor-pointer"
+                    {propertyDetails?.features?.moreFeatures &&
+                      propertyDetails?.features?.moreFeatures.length > 0 && (
+                        <span
+                          onClick={() => setSeAllFeatures(!seAllFeatures)}
+                          className={cn(
+                            textVariants({
+                              variant: "button",
+                            }),
+                            "underline cursor-pointer"
+                          )}
+                        >
+                          {seAllFeatures ? "View Less" : "View More"}{" "}
+                          {propertyDetails?.features?.moreFeatures.length}{" "}
+                          Features
+                        </span>
                       )}
-                    >
-                      View All 17 Features
-                    </Link>
                   </div>
                 </div>
                 <div className="border-t border-border"></div>
@@ -490,7 +510,7 @@ const Page = () => {
                         EPC Rating:
                       </Text>
                       <Text variant={"small"} className="">
-                        D
+                        {propertyDetails?.details.epcRating}
                       </Text>
                     </div>
                     <div className="flex items-center gap-5">
@@ -498,7 +518,7 @@ const Page = () => {
                         Ownership Type :
                       </Text>
                       <Text variant={"small"} className="">
-                        Freehold
+                        {propertyDetails?.details.ownershipType}
                       </Text>
                     </div>
                   </div>

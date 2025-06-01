@@ -1,0 +1,62 @@
+{
+  "contact_section": {
+    "title": "Get in Touch",
+    "description": "We're here to help with all your real estate needs. Reach out to us through any of the following channels.",
+    "anchors": [
+      {
+        "href_text": "Email Us",
+        "href": "mailto:info@1441.com"
+      },
+      {
+        "href_text": "WhatsApp",
+        "href": "https://wa.me/971501234567"
+      }
+    ],
+    "cta_items": [
+      {
+        "title": "Property Consultation",
+        "description": "Schedule a free consultation with our property experts.",
+        "button_text": "Book Now",
+        "button_link": "/book-consultation"
+      },
+      {
+        "title": "Join Our Team",
+        "description": "Explore career opportunities with us.",
+        "button_text": "View Openings",
+        "button_link": "/careers"
+      }
+    ]
+  },
+  "office_section": {
+    "title": "Our Offices",
+    "image_url": "https://example.com/images/office-locations.jpg"
+  },
+  "region": {
+    "_id": "60d21b4667d0d8992e610c85",
+    "region_name": "Middle East"
+  },
+  "country": {
+    "_id": "60d21b4667d0d8992e610c86",
+    "country_name": "United Arab Emirates"
+  },
+  "office": {
+    "address_line_one": "Sheikh Zayed Road",
+    "address_line_two": "Dubai Marina, Tower 3, Floor 15",
+    "po_box_text": "P.O. Box 12345",
+    "telephone": "+971 4 123 4567",
+    "working_hours_text": "Sunday - Thursday: 9:00 AM - 6:00 PM",
+    "latitude": 25.0657,
+    "longitude": 55.1713,
+    "region_id": "60d21b4667d0d8992e610c85",
+    "country_id": "60d21b4667d0d8992e610c86",
+    "vacancy_section_title": "Join Our Dubai Team",
+    "vacancy_section_description": "Explore exciting career opportunities at our Dubai office."
+  },
+  "vacancy": {
+    "title": "Senior Real Estate Consultant",
+    "description": "We are looking for experienced real estate consultants to join our growing team in Dubai.",
+    "link": "/careers/senior-real-estate-consultant",
+    "is_published": true,
+    "office_id": "60d21b4667d0d8992e610c87"
+  }
+}

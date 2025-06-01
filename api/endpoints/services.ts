@@ -33,4 +33,8 @@ export const servicePageApi = {
     );
     return response.data;
   },
+  getService: async (type: ServiceType): Promise<ApiResponse<any>> => {
+    const response = await api.get<ApiResponse<any>>(`/services?type=${type}`);
+    return response.data;
+  },
 };
