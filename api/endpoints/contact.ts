@@ -13,4 +13,8 @@ export const contactApi = {
     const response = await api.get("/contact-sections");
     return { contactSection: response.data.data };
   },
+  getContactPageDataFull: async (): Promise<ApiResponse<ContactPageData>> => {
+    const response = await api.get("/contact-page");
+    return response.data;
+  },
 };

@@ -3,13 +3,19 @@ import { ContactPageData, QueryParams } from "@/api/types";
 import { create } from "zustand";
 
 interface ContactState {
-  contactData: ContactPageData | null;
+  contactData: ContactPageData["contactSection"] | null;
+  officeSection: ContactPageData["officeSection"] | null;
+  offices: ContactPageData["offices"] | null;
+  vacancies: ContactPageData["vacancies"] | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ContactState = {
   contactData: null,
+  officeSection: null,
+  offices: null,
+  vacancies: null,
   loading: false,
   error: null,
 };
@@ -23,9 +29,14 @@ export const useContactStore = create<
   getContactData: async () => {
     try {
       set({ loading: true, error: null });
-      const response = await contactApi.getContactPageData();
+      const response = await contactApi.getContactPageDataFull();
+      console.log(response);
       set({
-        contactData: response,
+        contactData: response.data.contactSection,
+        officeSection: response.data.officeSection,
+        offices: response.data.offices,
+        vacancies: response.data.vacancies,
+        error: null,
         loading: false,
       });
     } catch (error) {

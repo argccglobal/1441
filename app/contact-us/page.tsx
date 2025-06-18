@@ -75,70 +75,6 @@ const Page = () => {
   }, []);
 
   console.log("contactData", contactData);
-
-  // const getCountryList = UseCountry((state) => state.getCountryList);
-  // const countryList = UseCountry((state) => state.countryList);
-  // const [discussTopic, setDiscussTopic] = useState<any[]>([]);
-  // const [industry, setIndustry] = useState<any[]>([]);
-
-  // const fetchIndustry = async () => {
-  //   const result = await getPublicIndustries();
-  //   setIndustry(result);
-  // };
-
-  // const getDiscussionTopic = async () => {
-  //   const topics = await getDiscussTopics();
-  //   setDiscussTopic(topics);
-  // };
-
-  // useEffect(() => {
-  //   getCountryList();
-  //   fetchIndustry();
-  //   getDiscussionTopic();
-  // }, []);
-  // const selectCountry = (value: any) => {
-  //   setValue("country", value, {
-  //     shouldValidate: true,
-  //     shouldDirty: true,
-  //   });
-  // };
-  // const selectIndustry = (value: any) => {
-  //   setValue("industry", value, {
-  //     shouldValidate: true,
-  //     shouldDirty: true,
-  //   });
-  // };
-  // const selectDiscuss = (value: any) => {
-  //   setValue("discuss", value, {
-  //     shouldValidate: true,
-  //     shouldDirty: true,
-  //   });
-  // };
-  // const [submitStatus, setSubmitStatus] = useState(false);
-  // const [btnLoader, setBtnLoader] = useState(false);
-  // const [error, setError] = useState("");
-  // const handleLetsTalk = async (data: Schema) => {
-  //   setError("");
-  //   setBtnLoader(true);
-  //   const body = {
-  //     full_name: data.name,
-  //     work_email: data.email,
-  //     ref_country: data.country?._id,
-  //     ref_industry: data.industry?._id,
-  //     ref_discussion_topic: data.discuss?._id,
-  //     additional_notes: data.additional_notes,
-  //   };
-
-  //   const res = await contactUs(body);
-
-  //   if (res.success) {
-  //     setSubmitStatus(true);
-  //     // toast.success("Successfully submitted");
-  //   } else {
-  //     setError(errorMsg(res));
-  //   }
-  //   setBtnLoader(false);
-  // };
   const [pageData, setPageData] = useState<{
     hero: {
       title: string;
@@ -496,16 +432,16 @@ const OurOffices = ({
       <div className="flex flex-col gap-16">
         <Text variant={"section_title_normal"}>
           {/* {data.title} */}
-          {contactData?.contactSection?.title}
+          {contactData?.title}
         </Text>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div className="flex  gap-7 flex-col justify-between">
             <Text variant={"body"} className="line-clamp-3">
-              {contactData?.contactSection?.description}
+              {contactData?.description}
             </Text>
             <Divider type="horizontal" className="h-px" />
-            {contactData?.contactSection?.anchors.map((anchor) => (
-              <>
+            {contactData?.anchors.map((anchor) => (
+              <div key={anchor.href}>
                 <LinkText
                   type="text"
                   icon="east"
@@ -516,10 +452,10 @@ const OurOffices = ({
                   label={anchor.href_text}
                 />
                 <Divider type="horizontal" className="h-px" />
-              </>
+              </div>
             ))}
           </div>
-          {contactData?.contactSection?.cta_items.map((item, index: number) => (
+          {contactData?.cta_items.map((item, index: number) => (
             <div
               key={index}
               className="p-8 flex gap-8 flex-col justify-between border-border border"
@@ -581,17 +517,18 @@ const OfficeInEarth = ({
     _id: string;
   }[];
 }) => {
+  const { officeSection } = useContactStore();
   return (
     <Section className="!pt-0 !pb-20" bgColor="white">
       <Text variant={"section_title_normal"} className="mb-16">
-        OUR OFFICES
+        {officeSection?.title}
       </Text>
       <div className="flex justify-center items-center gap-8">
         <Icon className="p-5 cursor-pointer bg-background" name="west" />
         <Image
           className="max-w-[200px] md:max-w-[500px]"
           alt="Earth"
-          src={EarthImg}
+          src={officeSection?.image_url || EarthImg.src}
           width={500}
           height={500}
         />
@@ -644,10 +581,15 @@ const ContactInfo = ({
   const toggleShowMap = () => {
     setShowMap(!showMap);
   };
+
+  const { offices } = useContactStore();
+  console.log("offices", offices);
+  const { vacancies } = useContactStore();
+  console.log("vacancies", vacancies);
   return (
     <Section className="-mb-px !py-20" bgColor="black">
-      {data.map((item, index) => (
-        <>
+      {offices?.map((item, index) => (
+        <div key={index}>
           <div
             key={index}
             className={cn(
@@ -661,13 +603,13 @@ const ContactInfo = ({
             />
             <div className="flex flex-wrap flex-auto flex-col gap-5">
               <Text variant={"card_title_large"} className="text-white">
-                {item.ref_region.region_name}. {item.ref_country?.country_name}
+                {item?.region_id?.region_name}. {item?.country_id?.country_name}
               </Text>
               <div className="grid grid-cols-1 w-full sm:grid-cols-2 gap-5">
                 <div className="">
                   <Text variant={"body"} className="text-neutralLight">
-                    {item.ref_region.region_name}.{" "}
-                    {item.ref_country?.country_name}
+                    {item.region_id.region_name}.{" "}
+                    {item.country_id?.country_name}
                   </Text>
                   <Text variant={"body"} className="text-neutralLight">
                     {item.address_line_one}
@@ -676,7 +618,7 @@ const ContactInfo = ({
                     {item.address_line_two}
                   </Text>
                   <Text variant={"body"} className="text-neutralLight">
-                    {item.ref_country?.country_name}
+                    {item?.country_id?.country_name}
                   </Text>
                   <Text variant={"body"} className="text-neutralLight">
                     Show on Map:{" "}
@@ -714,34 +656,21 @@ const ContactInfo = ({
               )}
             </div>
           </div>
-          <CurrentVacancy data={item} />
-        </>
+          {vacancies?.map((item, index) => (
+            <CurrentVacancy data={item} />
+          ))}
+        </div>
       ))}
     </Section>
   );
 };
-const CurrentVacancy = ({
-  data,
-}: {
-  data: {
-    published_job_count: number;
-    vacancy_section_description: string;
-    vacancy_section_title: string;
-    ref_country: {
-      _id: string;
-      ref_continent: string;
-      country_name: string;
-      country_code: string;
-      currency: string;
-      createdAt: string;
-      updatedAt: string;
-      country_short_name: string;
-
-      __v: number;
-    };
-  };
-}) => {
+const CurrentVacancy = ({ data }: { data: any }) => {
   return (
+    //   title: string;
+    // description: string;
+    // link: string;
+    // is_published: boolean;
+    // office_id: string;
     <div
       className={cn(
         "py-5 pr-0 md:pr-20 border-b border-border flex-wrap flex w-full gap-12 items-center"
@@ -751,21 +680,19 @@ const CurrentVacancy = ({
       <div className="flex flex-wrap gap-12 flex-auto items-center justify-between">
         <div className="flex flex-col gap-5">
           <Text variant={"card_title_large"} className="text-neutralLight">
-            {data.vacancy_section_title}
+            {data?.title}
           </Text>
           <Text variant={"body"} className="text-neutralLight">
-            {data.vacancy_section_description.replace(
-              "[job_count]",
-              data.published_job_count.toString()
-            )}
+            12
           </Text>
         </div>
         <LinkText
           className="text-[#333333] !capitalize"
           type="link"
           href={
-            data.ref_country._id &&
-            `/job-search/?ref_country=${data.ref_country._id}`
+            ""
+            // data.ref_country._id &&
+            // `/job-search/?ref_country=${data.ref_country._id}`
           }
           label={"View"}
         />

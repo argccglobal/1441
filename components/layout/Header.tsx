@@ -176,15 +176,21 @@ const SideBarMegaMenu = ({ setIsOpenMegaMenu }: any) => {
       ],
     },
   ];
-
+  const { headerData, isLoading, fetchHeaderData, updateAnnouncement } =
+    useHeaderStore();
   const [activeMenu, setActiveMenu] = useState(megaMenu[0]);
 
   return (
     <div className="flex flex-col min-w-[900px] items-center justify-between bg-white">
       <div className="flex  w-full items-center gap-5 justify-between  py-4 px-[52px]">
         <div className="flex flex-col items-start gap-2.5">
-          <Image src={LogoImg} alt="Logo" />
-          <Text variant={"small"}>Properties & Investments</Text>
+          <Image
+            width={60}
+            height={20}
+            src={headerData?.logo || LogoImg}
+            alt="Logo"
+          />
+          <Text variant={"small"}>{headerData?.title}</Text>
         </div>
         <Icon
           onClick={() => setIsOpenMegaMenu(false)}
