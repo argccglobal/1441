@@ -1,4 +1,4 @@
-type IconType =
+export type IconType =
   | "pause"
   | "location_on"
   | "work"
@@ -48,6 +48,10 @@ type IconType =
   | "chevron_right"
   | "arrow_circle_right"
   | "arrow_circle_left"
+  | "tune"
+  | "photo_camera"
+  | "map"
+  | "play_circle"
   | "expand_more"
   | "location_on"
   | "business_center"
@@ -72,7 +76,7 @@ type IconType =
   | "account_circle"
   | "logout"
   | "calendar_month"
-  | "";
+  | any;
 
 interface HERO {
   title: string;

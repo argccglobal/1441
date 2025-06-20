@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Icon } from "./Icon";
-import { SmallHeading, Text } from "./Text";
+import { Text } from "./Text";
 import { CheckboxInput } from "./Checkbox";
-import { cn } from "../../lib/utils";
 import { on } from "events";
+import { cn } from "@/utils/classNames";
 export interface Options {
   value: string;
   label: string;
@@ -99,13 +99,20 @@ const Select = ({
   return (
     <>
       {label && (
-        <SmallHeading
-          onClick={() => setOpen(!open)}
-          className="!mb-2.5"
+        // <SmallHeading
+        //   onClick={() => setOpen(!open)}
+        //   className="!mb-2.5"
+        //   color={dark ? "white" : "neutralDark"}
+        // >
+        //   {label}
+        // </SmallHeading>
+        <Text
           color={dark ? "white" : "neutralDark"}
+          className="!mb-2.5"
+          variant={"small_heading"}
         >
           {label}
-        </SmallHeading>
+        </Text>
       )}
       <div className={cn("relative flex-auto font-medium", open && "z-[999]")}>
         <div
@@ -140,7 +147,6 @@ const Select = ({
                 dark ? " !text-body_3 !text-white" : "!text-neutralDark",
                 placeholderClass
               )}
-              size="body_3"
             >
               {placeholder}
             </Text>
@@ -225,9 +231,7 @@ const Select = ({
                 {option?.tag && (
                   <Text
                     className="py-1 !text-body_3 px-4 bg-[#EBECFE] rounded-full"
-                    size="body_5"
-                    tag="span"
-                    weight="regular"
+                    variant={"body"}
                     color="primary"
                   >
                     {option?.tag}

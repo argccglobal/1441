@@ -1,6 +1,5 @@
 import React, { Children } from "react";
-import { SmallText } from "./Text";
-import { ChildProcess } from "child_process";
+import { Text } from "./Text";
 
 function ErrorText({
   children,
@@ -10,9 +9,9 @@ function ErrorText({
   className: string;
 }) {
   return (
-    <SmallText color="danger-500" className={className}>
+    <Text variant="small" className={`text-danger-500 ${className}`}>
       {children}
-    </SmallText>
+    </Text>
   );
 }
 

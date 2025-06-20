@@ -1,5 +1,5 @@
 import { type } from "os";
-import { cn } from "../../lib/utils";
+import { cn } from "@/utils/classNames";
 
 type BgColor = "background" | "black" | "white";
 type BorderColor = "border";

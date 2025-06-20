@@ -19,7 +19,7 @@ export const NavLink: FC<NavLinkProps> = ({ title, href, children, type }) => {
           href={href}
           className="pb-[6px] flex max-w-min border-b-2 border-transparent hover:border-primary"
         >
-          <Text size="body_2" weight="regular" color="neutralDark">
+          <Text variant={"body"} color="neutralDark">
             {title}
           </Text>
         </Link>

@@ -81,9 +81,9 @@ const AboutArea = () => {
           </Text>
           <div className="flex flex-col gap-8">
             <div className="w-full grid grid-cols-1 md:grid-cols-[auto_500px] gap-16">
-              {pageData?.aboutUs?.content.length > 0 && (
+              {pageData?.aboutUs?.content && pageData.aboutUs.content.length > 0 && (
                 <ContentSection
-                  texts={pageData?.aboutUs?.content.map((text: string) => text)}
+                  texts={pageData.aboutUs.content}
                 />
               )}
               {pageData?.aboutUs?.image && (
@@ -121,12 +121,7 @@ const PropertyConsultant = () => {
               // 12 item repeted member
               pageData?.consultants.team &&
                 pageData?.consultants.team.map(
-                  (
-                    team: {
-                      teamId: Team;
-                    },
-                    index
-                  ) => <Member team={team.teamId} key={index} />
+                  (team, index) => <Member team={team} key={index} />
                 )
             }
           </div>
@@ -190,7 +185,7 @@ const OurClients = () => {
                   )}
                   style={{ backgroundColor: client.bgColor }}
                 >
-                  <Icon name={client.icon} className="text-[24px] text-white" />
+                  <Icon name={client.icon as any} className="text-[24px] text-white" />
                 </div>
                 <Text variant={"card_title_small"}>{client.title}</Text>
               </div>
@@ -236,18 +231,16 @@ const OurClients = () => {
   );
 };
 const Testimonials = () => {
-  const swiperRef = useRef("");
-  const [totalNavigationItem, setTotalNavigationItem] = useState<number>(0);
-
-  const [activeIndex, setActiveIndex] = useState(0);
   const { pageData, setPageData } = useAboutPageData();
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [totalNavigationItem, setTotalNavigationItem] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef<any>(null);
 
   const fetchTestimonials = async () => {
     try {
       const response = await aboutApi.getTestimonials();
       setTestimonials(response?.data);
-      setTotalNavigationItem(response?.data.length);
     } catch (error) {
       console.log("Error", error);
     }

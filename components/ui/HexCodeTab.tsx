@@ -1,6 +1,6 @@
 // components/Menu.tsx
 import React, { useState } from "react";
-import { Body, CardTitle, SectionTitle, SmallText, Text } from "./Text";
+import { Text } from "./Text";
 import { Slider } from "./Slider";
 import { SwiperSlide } from "swiper/react";
 import { Content } from "next/font/google";
@@ -72,11 +72,9 @@ export const HexCodeTab: React.FC<HexCodeTabProps> = ({ items }) => {
                       }`}
                     >
                       <Text
-                        size="h6"
-                        tag="h6"
-                        weight="medium"
-                        className="z-40"
-                        color="white"
+                        variant="card_title_small"
+                        as="h6"
+                        className="z-40 text-white"
                       >
                         {item.title}
                       </Text>

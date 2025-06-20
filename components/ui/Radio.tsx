@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { Icon } from "./Icon";
-import { cn } from "../../lib/utils";
+import { cn } from "@/utils/classNames";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;

@@ -62,17 +62,20 @@ const SimilarProduct = () => {
           >
             <SwiperSlide>
               <div className="w-full">
-                <Property />
+                {/* Property component requires a property prop */}
+                {/* <Property property={mockProperty} /> */}
               </div>
             </SwiperSlide>
             <SwiperSlide>
               <div className="w-full">
-                <Property />
+                {/* Property component requires a property prop */}
+                {/* <Property property={mockProperty} /> */}
               </div>
             </SwiperSlide>
             <SwiperSlide>
               <div className="w-full">
-                <Property />
+                {/* Property component requires a property prop */}
+                {/* <Property property={mockProperty} /> */}
               </div>
             </SwiperSlide>
           </Swiper>

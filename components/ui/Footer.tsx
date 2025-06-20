@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
-import { Body, ExtraSmallText, FooterMenuText, SmallText, Text } from "./Text";
+import { Text } from "./Text";
 import { Button } from "./Button";
 import { Subscribe } from "./Subscribe";
 import { LinkText } from "./LinkText";
@@ -202,15 +202,15 @@ export const Footer: React.FC<FooterProps> = ({
             />
           </Link>
           <div className="flex items-start justify-between mb-12 flex-wrap gap-4">
-            <SmallText color="white" className="max-w-[370px]">
+            <Text variant="small" className="text-white max-w-[370px]">
               {topDescription}
-            </SmallText>
+            </Text>
             <div className="hidden text-whiten w-full xl:w-auto lg:flex items-start justify-between flex-wrap gap-16">
               {footerLinks.map((footerLink, index) => (
                 <div key={index} className="flex flex-col gap-5">
-                  <FooterMenuText color="white" className="mb-3">
+                  <Text variant="footer_menu_title" className="text-white mb-3">
                     {footerLink.label}
-                  </FooterMenuText>
+                  </Text>
                   {footerLink.links.map((link, index) => (
                     <div key={index}>
                       <Button
@@ -225,7 +225,7 @@ export const Footer: React.FC<FooterProps> = ({
               ))}
 
               {/* <ul className="flex flex-col gap-5">
-              <Text className="mb-3" size="body_1" weight="semibold">
+              <Text className="mb-3 font-semibold" variant="body">
                 Company
               </Text>
               <li>
@@ -259,12 +259,12 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
           <div className="flex items-end justify-between w-full flex-wrap gap-8 mb-12">
             <div className="flex w-full sm:w-auto flex-col items-start gap-5">
-              <Text color="white" size="body_1" weight="semibold">
+              <Text variant="body" className="text-white font-semibold">
                 Newsletter
               </Text>
-              <SmallText color="white">
+              <Text variant="small" className="text-white">
                 Get our emails on inspiration & tips to grow your business
-              </SmallText>
+              </Text>
               <Subscribe
                 className="lg:min-w-[260px] placeholder:text-white min-w-[200px]"
                 id="email"
@@ -290,12 +290,12 @@ export const Footer: React.FC<FooterProps> = ({
               alt="visa"
             />
             <div className="flex flex-col gap-4">
-              <ExtraSmallText className="text-right max-w-sm text-neutralLight">
+              <Text variant="extra_small" className="text-right max-w-sm text-neutralLight">
                 {bottomDescription}
-              </ExtraSmallText>
-              <ExtraSmallText className="text-right text-neutralLight">
+              </Text>
+              <Text variant="extra_small" className="text-right text-neutralLight">
                 {copyright}
-              </ExtraSmallText>
+              </Text>
             </div>
           </div>
         </div>

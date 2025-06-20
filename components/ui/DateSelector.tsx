@@ -3,8 +3,8 @@
 
 import * as React from "react";
 import { Icon } from "./Icon";
-import { SmallText } from "./Text";
-import { cn } from "@/lib/utils";
+import { Text } from "./Text";
+import { cn } from "@/utils/classNames";
 import Datepicker from "tailwind-datepicker-react";
 
 export const DateSelector = ({
@@ -118,9 +118,9 @@ export const DateSelector = ({
         </Datepicker>
       </div>
       {error && errorMsg && (
-        <SmallText className="text-danger-600 block d-block font-roboto font-light w-full leading-[21px]">
+        <Text variant="small" className="text-danger-600 block d-block font-roboto font-light w-full leading-[21px]">
           {errorMsg}
-        </SmallText>
+        </Text>
       )}
     </div>
   );

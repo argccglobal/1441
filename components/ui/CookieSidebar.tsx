@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Icon } from "./Icon";
 import Link from "next/link";
-import { Body, Text } from "./Text";
+import { Text } from "./Text";
 import React, { useState } from "react";
 import { Button } from "./Button";
 import { LinkText } from "./LinkText";
@@ -61,11 +61,11 @@ export const CookieSideBar: React.FC<CookieSideBarProps> = ({
         </div>
       </div>
       <div className="flex flex-col gap-2.5 p-5 pb-8">
-        <Text size="h6" weight="medium">
+        <Text variant="card_title_large" className="font-medium">
           {title}
           {/* Privacy Preference Center */}
         </Text>
-        <Text className="mb-2.5 leading-normal" size="body_3" weight="light">
+        <Text className="mb-2.5 leading-normal" variant="body">
           {description}
           {/*  */}
         </Text>
@@ -83,7 +83,7 @@ export const CookieSideBar: React.FC<CookieSideBarProps> = ({
       </div>
       {moreInfo && (
         <div className="p-5 pt-8 border-t border-border">
-          <Text size="h5" className="mb-10">
+          <Text variant="section_title_normal" className="mb-10">
             Most Recent preferences
           </Text>
           <div className="flex mb-5 flex-col gap-5">

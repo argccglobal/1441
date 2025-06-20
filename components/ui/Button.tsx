@@ -5,6 +5,7 @@ import { Text } from "./Text";
 import Link from "next/link";
 import { Icon } from "./Icon";
 import { cn } from "@/utils/classNames";
+import { IconType } from "@/types";
 
 // html tag element props in nextjs
 

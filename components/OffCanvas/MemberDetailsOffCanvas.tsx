@@ -74,7 +74,7 @@ const MemberDetailsOffcanvas = () => {
               {["Biography", "Projects"].map((tab) => (
                 <button
                   key={tab.toLowerCase().replace(" ", "-")}
-                  onClick={() => setActiveTab(tab.toLowerCase())}
+                  onClick={() => setActiveTab(tab.toLowerCase() as "biography" | "projects")}
                   className={cn(
                     textVariants({
                       variant: "button",
@@ -109,7 +109,7 @@ const BiographyContent = () => {
   return (
     <ContentSection
       color="text-neutralDark"
-      texts={[selectedMember?.biography.map((text) => text)]}
+      texts={selectedMember?.biography?.map((text) => text) || []}
     />
   );
 };
@@ -118,23 +118,23 @@ const ProjectsContent = () => {
 
   return (
     <div className="flex flex-col">
-      {selectedMember?.soldProperties.map((project, index) => (
+      {selectedMember?.soldProperties.map((property, index) => (
         <div key={index} className="flex items-start gap-1">
           <div className="h-6 w-6 flex items-center justify-center">
             <div className="h-1.5 w-1.5 rounded-full bg-neutralDark"></div>
           </div>
           <Text variant={"body"}>
-            <b>{project.title}</b> – {project.description}
+            {property}
           </Text>
         </div>
       ))}
-      {selectedMember?.activeListings.map((project, index) => (
+      {selectedMember?.activeListings.map((property, index) => (
         <div key={index} className="flex items-start gap-1">
           <div className="h-6 w-6 flex items-center justify-center">
             <div className="h-1.5 w-1.5 rounded-full bg-neutralDark"></div>
           </div>
           <Text variant={"body"}>
-            <b>{project.title}</b> – {project.description}
+            {property}
           </Text>
         </div>
       ))}

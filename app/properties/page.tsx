@@ -27,7 +27,7 @@ const page = () => {
   const { propertiesPageData } = usePropertyPageData();
 
   const [isOpen, setIsOpen] = React.useState(false);
-  const handleSortSelect = () => {
+  const handleSortSelect = (option?: any) => {
     setIsOpen(!isOpen);
   };
   const [isOpeBuyingModal, setIsOpeBuyingModal] =
@@ -38,7 +38,7 @@ const page = () => {
     React.useState<boolean>(false);
 
   const [properties, setProperties] = React.useState<{
-    data: [];
+    data: any[];
     meta: {
       total: number;
       page: number;
@@ -58,7 +58,17 @@ const page = () => {
   const fetchProperties = async (params?: any) => {
     try {
       const response = await propertiesApi.getProperties(params);
-      setProperties(response?.data);
+      if (response) {
+        setProperties({
+          data: response.data || [],
+          meta: {
+            total: response.total || 0,
+            page: response.page || 0,
+            limit: response.limit || 0,
+            pages: response.totalPages || 0,
+          },
+        });
+      }
     } catch (error) {
       console.error("Error fetching properties:", error);
     }
@@ -261,7 +271,6 @@ const page = () => {
                   key={index}
                   isBlur={item?.isPrivate}
                   property={item}
-                  onClick={() => setIsOpen(true)}
                 />
               ))}
             </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Icon } from "./Icon";
 import { cn } from "@/utils/classNames";
 import { Text } from "./Text";
+import { IconType } from "@/types";
 
 // extend btn element or paragraph element from react props
 
@@ -116,7 +117,7 @@ export const Badge = ({
         </>
       )}
       <span>{label}</span>
-      {tag && <SmallText className={tagStyle}>{tag}</SmallText>}
+      {tag && <Text variant="small" className={tagStyle}>{tag}</Text>}
       {iconPosition === "right" && icon && (
         <>
           {loading ? (

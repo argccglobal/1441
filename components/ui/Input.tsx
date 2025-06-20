@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { Icon } from "./Icon";
-import { SmallText } from "./Text";
+import { Text } from "./Text";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -71,9 +71,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
 
           {error && errorMsg && (
-            <SmallText color="danger-600" className="w-full mt-2.5">
+            <Text variant="small" className="w-full mt-2.5 text-danger-600">
               {errorMsg}
-            </SmallText>
+            </Text>
           )}
         </div>
       </div>

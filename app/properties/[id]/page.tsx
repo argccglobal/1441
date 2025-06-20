@@ -12,6 +12,7 @@ import VectorBottomRightImg from "@/public/vector_bottom_right.svg";
 import VectorTopRightImg from "@/public/vector_top_right.svg";
 import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
+import { IconType } from "@/types";
 // import Property from "@/components/card/Property";
 import { Input } from "@/components/ui/Input";
 import SearchSelect from "@/components/ui/SearchSelect";
@@ -90,7 +91,7 @@ const Page = () => {
 
   return (
     <>
-      {activeTab && <PropertyOffcanvas data={propertyDetails} />}
+      {activeTab && propertyDetails && <PropertyOffcanvas data={propertyDetails} />}
 
       {isOpenCanvas && <Overlay setAction={setIsOpenCanvas} />}
 
@@ -361,7 +362,7 @@ const Page = () => {
                         <Text variant={"card_title_small"}>Map</Text>
                       </div>
                     </div>
-                    <PropertyCoreDetails property={propertyDetails} />
+                    {propertyDetails && <PropertyCoreDetails property={propertyDetails} />}
                   </div>
                 </div>
                 <ContentSection
@@ -546,7 +547,7 @@ const Page = () => {
                       </Link>
                       <div className="flex items-center gap-5">
                         <Icon name="call" className="text-[20px]" />
-                        <Icon name="mail" className="text-[20px]" />
+                        <Icon name="email" className="text-[20px]" />
                       </div>
                     </div>
                   </div>
@@ -571,7 +572,7 @@ const Page = () => {
                       </Link>
                       <div className="flex items-center gap-5">
                         <Icon name="call" className="text-[20px]" />
-                        <Icon name="mail" className="text-[20px]" />
+                        <Icon name="email" className="text-[20px]" />
                       </div>
                     </div>
                   </div>
@@ -631,7 +632,7 @@ const Landmarks = ({ landmarks }: { landmarks: any }) => {
         <div className="flex flex-col gap-5">
           {landmarks &&
             landmarks.length > 0 &&
-            landmarks.map((item, index) => <StationItem {...item} />)}
+            landmarks.map((item: any, index: number) => <StationItem {...item} />)}
         </div>
 
         <div className="bg-border h-full"></div>
@@ -664,7 +665,7 @@ const StationItem = ({
 }) => {
   return (
     <div className="flex items-center gap-2.5">
-      <Icon name={icon} className="text-[20px]" />
+      <Icon name={icon as IconType} className="text-[20px]" />
       <div className="flex flex-auto items-center gap-2.5 justify-between">
         <Text variant={"card_title_large"}>{name}</Text>
         <Text variant={"card_title_large"} className="text-neutral">
@@ -699,7 +700,7 @@ const Schools = ({ schools }: { schools: any }) => {
   return (
     <div className="flex flex-col gap-5">
       {schools &&
-        schools.map((school, index) => (
+        schools.map((school: any, index: number) => (
           <SchoolsItem key={index} school={school} />
         ))}
     </div>

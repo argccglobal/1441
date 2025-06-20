@@ -34,7 +34,7 @@ export const MobileMenu: React.FC<AccordionProps> = ({ title, children }) => {
         className="cursor-pointer flex items-center justify-between"
         onClick={toggleAccordion}
       >
-        <Text size="body_1" weight="semibold" color="white">
+        <Text variant="body" className="text-white font-semibold">
           {title}
         </Text>
         <Icon

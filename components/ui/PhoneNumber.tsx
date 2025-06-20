@@ -1,5 +1,4 @@
 import React from "react";
-import { Select } from "./Select";
 import { Input } from "./Input";
 
 const PhoneNumber = () => {

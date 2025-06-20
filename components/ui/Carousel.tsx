@@ -42,10 +42,8 @@ export const Carousel: React.FC<CarouselProps> = ({ sliders }) => {
             <SwiperSlide key={i} className="w-[180px]">
               <div className="flex min-h-[185px] flex-col items-center text-center justify-between rgb-border w-auto bg-clip-border px-5 py-5 rounded-[20px]">
                 <Text
-                  className="mb-[25px]"
-                  size="body_1"
-                  color="white"
-                  weight="bold"
+                  className="mb-[25px] text-white font-bold"
+                  variant="body"
                 >
                   {slider.title}
                 </Text>

@@ -278,7 +278,7 @@ const SideBarMegaMenu = ({ setIsOpenMegaMenu }: any) => {
                       </Link>
                     );
                   })}
-                  {activeMenu?.links.length > 4 && (
+                  {activeMenu?.links && activeMenu.links.length > 4 && (
                     <div className="flex justify-end">
                       <Link
                         href={"#"}

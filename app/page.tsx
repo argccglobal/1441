@@ -54,7 +54,7 @@ export default function Home() {
             className="w-full"
             width={1920}
             height={1080}
-            src={homeData?.heroImage?.imageUrl}
+            src={homeData?.heroImage?.imageUrl || ''}
             alt="Hero"
           />
           <TabLinks />
@@ -261,7 +261,7 @@ const RegionAreaSection = () => {
             <PropertiesRegionAndTypeCol
               key={index}
               title={item.title}
-              locations={item.locations}
+              locations={[item.location?.city || '']}
             />
           ))}
         </div>
@@ -361,7 +361,7 @@ const FeaturedSection = () => {
                               label: "Floor Plan",
                             },
                             {
-                              value: `${property?.details?.landSize} ${property?.details?.landSizeUnit}`,
+                              value: `${property?.landSize} ${property?.landSizeUnit}`,
                               label: "Plot Size",
                             },
                           ].map((item, idx) => (
@@ -423,7 +423,7 @@ const PropertiesRegionAndTypeCol = ({
   locations,
 }: {
   title: string;
-  locations: string[];
+  locations: Array<{name: string} | string>;
 }) => {
   return (
     <div className="flex flex-col gap-8">
@@ -439,7 +439,7 @@ const PropertiesRegionAndTypeCol = ({
               className="text-neutral cursor-pointer hover:underline max-w-fit"
             >
               {" "}
-              {loc?.name}
+              {typeof loc === 'string' ? loc : loc?.name}
             </Text>
           ))}
       </div>

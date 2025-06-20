@@ -7,7 +7,7 @@ import { Text } from "@/components/ui/Text";
 import ServiceCard from "@/components/common/ServiceCard";
 import { ServiceType, useServicePageStore } from "@/store/servicePage";
 import { useEffect } from "react";
-import { HaveQuestions } from "../tenancy-services/page";
+import { HaveQuestions } from "../tenancy-services/components/HaveQuestions";
 export default function Home() {
   const { pageData, getServicePageData, services } = useServicePageStore();
 

@@ -6,7 +6,6 @@ import { Divider } from "@/components/ui/Divider";
 import { Icon } from "@/components/ui/Icon";
 import { Input } from "@/components/ui/Input";
 import { LinkText } from "@/components/ui/LinkText";
-import { Select } from "@/components/ui/Select";
 // import { SearchSelect } from "@/components/ui/SearchSelect";
 // import {
 //   Body,
@@ -244,7 +243,7 @@ const Page = () => {
                 ]}
               />
             </div>
-            {1 === 2 ? (
+            {false ? (
               <>
                 <Text
                   variant={"small_heading"}
@@ -603,13 +602,18 @@ const ContactInfo = ({
             />
             <div className="flex flex-wrap flex-auto flex-col gap-5">
               <Text variant={"card_title_large"} className="text-white">
-                {item?.region_id?.region_name}. {item?.country_id?.country_name}
+                {/* Cast to any to handle the API returning objects instead of strings */}
+                {(item?.region_id as any)?.region_name || ""}
+                {(item?.country_id as any)?.country_name
+                  ? `. ${(item?.country_id as any)?.country_name}`
+                  : ""}
               </Text>
               <div className="grid grid-cols-1 w-full sm:grid-cols-2 gap-5">
                 <div className="">
                   <Text variant={"body"} className="text-neutralLight">
-                    {item.region_id.region_name}.{" "}
-                    {item.country_id?.country_name}
+                    {/* Cast to any to handle the API returning objects instead of strings */}
+                    {(item?.region_id as any)?.region_name || ""}{" "}
+                    {(item?.country_id as any)?.country_name || ""}
                   </Text>
                   <Text variant={"body"} className="text-neutralLight">
                     {item.address_line_one}
@@ -618,7 +622,8 @@ const ContactInfo = ({
                     {item.address_line_two}
                   </Text>
                   <Text variant={"body"} className="text-neutralLight">
-                    {item?.country_id?.country_name}
+                    {/* Cast to any to handle the API returning objects instead of strings */}
+                    {(item?.country_id as any)?.country_name || ""}
                   </Text>
                   <Text variant={"body"} className="text-neutralLight">
                     Show on Map:{" "}

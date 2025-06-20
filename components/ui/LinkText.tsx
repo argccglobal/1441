@@ -5,6 +5,7 @@ import { Text, textVariants } from "./Text";
 import Link from "next/link";
 import { Icon } from "./Icon";
 import { cn } from "@/utils/classNames";
+import { IconType } from "@/types";
 
 interface LinkTextProps {
   type?: "link" | "text";
