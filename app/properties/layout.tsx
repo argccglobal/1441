@@ -16,7 +16,7 @@ import InvestingModal from "@/components/Modal/InvestingModal";
 import {
   propertyPageApi,
   PropertyPageData,
-} from "@/api/endpoints/propertyPage";
+} from "@/apiRequest/endpoints/propertyPage";
 import { usePropertyPageData } from "@/store/propertyDetailsOffcanvas";
 
 const geistSans = Geist({

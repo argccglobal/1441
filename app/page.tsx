@@ -16,9 +16,9 @@ import HeroImg from "@/public/home_hero.png";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { homeApi } from "@/api/endpoints/home";
+import { homeApi } from "@/apiRequest/endpoints/home";
 import useHomeStore, { FeaturedProperties, HomeData } from "@/store/home";
-import { ApiResponse } from "@/api/types";
+import { ApiResponse } from "@/apiRequest/types";
 import { useEffect, useRef, useState } from "react";
 import PageLoader from "@/components/ui/PageLoader";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -54,7 +54,7 @@ export default function Home() {
             className="w-full"
             width={1920}
             height={1080}
-            src={homeData?.heroImage?.imageUrl || ''}
+            src={homeData?.heroImage?.imageUrl || ""}
             alt="Hero"
           />
           <TabLinks />
@@ -261,7 +261,7 @@ const RegionAreaSection = () => {
             <PropertiesRegionAndTypeCol
               key={index}
               title={item.title}
-              locations={[item.location?.city || '']}
+              locations={[item.location?.city || ""]}
             />
           ))}
         </div>
@@ -423,7 +423,7 @@ const PropertiesRegionAndTypeCol = ({
   locations,
 }: {
   title: string;
-  locations: Array<{name: string} | string>;
+  locations: Array<{ name: string } | string>;
 }) => {
   return (
     <div className="flex flex-col gap-8">
@@ -439,7 +439,7 @@ const PropertiesRegionAndTypeCol = ({
               className="text-neutral cursor-pointer hover:underline max-w-fit"
             >
               {" "}
-              {typeof loc === 'string' ? loc : loc?.name}
+              {typeof loc === "string" ? loc : loc?.name}
             </Text>
           ))}
       </div>

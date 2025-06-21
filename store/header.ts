@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { headerApi, HeaderData } from "@/api/endpoints/header";
+import { headerApi, HeaderData } from "@/apiRequest/endpoints/header";
 
 interface HeaderStore {
   headerData: HeaderData | null;

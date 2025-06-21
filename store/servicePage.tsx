@@ -1,4 +1,4 @@
-import { servicePageApi } from "@/api/endpoints/services";
+import { servicePageApi } from "@/apiRequest/endpoints/services";
 import { create } from "zustand";
 
 export enum ServiceType {

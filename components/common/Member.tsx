@@ -6,7 +6,7 @@ import { Icon } from "../ui/Icon";
 import MemberDetailsOffcanvas from "../OffCanvas/MemberDetailsOffCanvas";
 import Overlay from "./Overlay";
 import { useMemberDetailsOffcanvas } from "@/store/memberDetailsOffcanvas";
-import { Team } from "@/api/endpoints/teams";
+import { Team } from "@/apiRequest/endpoints/teams";
 const Member = ({ team }: { team: Team }) => {
   const { isOpenCanvas, closeCanvas, openCanvas, setSelectedMember } =
     useMemberDetailsOffcanvas();

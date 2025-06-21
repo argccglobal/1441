@@ -16,11 +16,11 @@ import BuyingModal from "@/components/Modal/BuyingModal";
 import SellingModal from "@/components/Modal/SellingModal";
 import InvestingModal from "@/components/Modal/InvestingModal";
 import Pagination from "@/components/common/Pagination";
-import { propertiesApi } from "@/api/endpoints/properties";
+import { propertiesApi } from "@/apiRequest/endpoints/properties";
 import {
   propertyPageApi,
   PropertyPageData,
-} from "@/api/endpoints/propertyPage";
+} from "@/apiRequest/endpoints/propertyPage";
 import { usePropertyPageData } from "@/store/propertyDetailsOffcanvas";
 
 const page = () => {

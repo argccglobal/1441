@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "../ui/Text";
-import { Property } from "@/api/endpoints/properties";
+import { Property } from "@/apiRequest/endpoints/properties";
 
 const PropertyCoreDetails = ({ property }: { property?: Property }) => {
   return (
@@ -9,12 +9,16 @@ const PropertyCoreDetails = ({ property }: { property?: Property }) => {
         { value: property?.features?.bedrooms || "-", label: "Bedroom" },
         { value: property?.features?.bathrooms || "-", label: "Bathrooms" },
         {
-          value: property?.features?.floorPlanSize ? `${property?.features?.floorPlanSize}` : "-",
+          value: property?.features?.floorPlanSize
+            ? `${property?.features?.floorPlanSize}`
+            : "-",
           label: "Floor Plan",
         },
         {
-          value: property?.landSize && property?.landSizeUnit ? 
-            `${property?.landSize} ${property?.landSizeUnit}` : "-",
+          value:
+            property?.landSize && property?.landSizeUnit
+              ? `${property?.landSize} ${property?.landSizeUnit}`
+              : "-",
           label: "Plot Size",
         },
       ].map((item, index) => (

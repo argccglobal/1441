@@ -1,4 +1,4 @@
-import { PropertyPageData } from "@/api/endpoints/propertyPage";
+import { PropertyPageData } from "@/apiRequest/endpoints/propertyPage";
 import { create } from "zustand";
 
 type PropertyDetailsOffcanvasState = {

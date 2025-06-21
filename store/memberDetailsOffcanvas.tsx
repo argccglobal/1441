@@ -1,4 +1,4 @@
-import { Team } from "@/api/endpoints/teams";
+import { Team } from "@/apiRequest/endpoints/teams";
 import { create } from "zustand";
 
 type MemberDetailsOffcanvasState = {

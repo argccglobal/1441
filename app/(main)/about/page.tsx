@@ -26,10 +26,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Navigation } from "swiper/modules";
 import { useEffect, useRef, useState } from "react";
-import { aboutApi } from "@/api/endpoints/about";
+import { aboutApi } from "@/apiRequest/endpoints/about";
 import { useAboutPageData } from "@/store/about";
-import { Testimonial } from "@/api/types";
-import { Team } from "@/api/endpoints/teams";
+import { Testimonial } from "@/apiRequest/types";
+import { Team } from "@/apiRequest/endpoints/teams";
 import { useMemberDetailsOffcanvas } from "@/store/memberDetailsOffcanvas";
 import MemberDetailsOffcanvas from "@/components/OffCanvas/MemberDetailsOffCanvas";
 import Overlay from "@/components/common/Overlay";
@@ -81,11 +81,10 @@ const AboutArea = () => {
           </Text>
           <div className="flex flex-col gap-8">
             <div className="w-full grid grid-cols-1 md:grid-cols-[auto_500px] gap-16">
-              {pageData?.aboutUs?.content && pageData.aboutUs.content.length > 0 && (
-                <ContentSection
-                  texts={pageData.aboutUs.content}
-                />
-              )}
+              {pageData?.aboutUs?.content &&
+                pageData.aboutUs.content.length > 0 && (
+                  <ContentSection texts={pageData.aboutUs.content} />
+                )}
               {pageData?.aboutUs?.image && (
                 <Image
                   src={pageData?.aboutUs.image}
@@ -120,9 +119,9 @@ const PropertyConsultant = () => {
             {
               // 12 item repeted member
               pageData?.consultants.team &&
-                pageData?.consultants.team.map(
-                  (team, index) => <Member team={team} key={index} />
-                )
+                pageData?.consultants.team.map((team, index) => (
+                  <Member team={team} key={index} />
+                ))
             }
           </div>
           <div className="flex justify-end">
@@ -185,7 +184,10 @@ const OurClients = () => {
                   )}
                   style={{ backgroundColor: client.bgColor }}
                 >
-                  <Icon name={client.icon as any} className="text-[24px] text-white" />
+                  <Icon
+                    name={client.icon as any}
+                    className="text-[24px] text-white"
+                  />
                 </div>
                 <Text variant={"card_title_small"}>{client.title}</Text>
               </div>

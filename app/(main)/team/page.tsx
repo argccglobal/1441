@@ -21,7 +21,7 @@ import Pagination from "@/components/common/Pagination";
 import Overlay from "@/components/common/Overlay";
 import MemberDetailsOffcanvas from "@/components/OffCanvas/MemberDetailsOffCanvas";
 import { useMemberDetailsOffcanvas } from "@/store/memberDetailsOffcanvas";
-import { Team, teamsApi } from "@/api/endpoints/teams";
+import { Team, teamsApi } from "@/apiRequest/endpoints/teams";
 import { usePropertyPageData } from "@/store/propertyDetailsOffcanvas";
 import { useTeamPageData } from "@/store/team";
 import { useEffect } from "react";

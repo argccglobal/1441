@@ -1,5 +1,5 @@
-import { contactApi } from "@/api/endpoints/contact";
-import { ContactPageData, QueryParams } from "@/api/types";
+import { contactApi } from "@/apiRequest/endpoints/contact";
+import { ContactPageData, QueryParams } from "@/apiRequest/types";
 import { create } from "zustand";
 
 interface ContactState {

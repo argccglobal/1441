@@ -18,7 +18,7 @@ import Image from "next/image";
 import { Icon } from "../ui/Icon";
 import { textVariants } from "../ui/Text";
 import Map from "../Map";
-import { Property } from "@/api/endpoints/properties";
+import { Property } from "@/apiRequest/endpoints/properties";
 
 const PropertyOffcanvas = ({ data }: { data: Property }) => {
   // const [isOpenCanvas, setIsOpenCanvas] = React.useState(false);
@@ -89,7 +89,10 @@ const Videos = ({ data }: { data: Media }) => {
       <video
         height={"504px"}
         controls
-        src={data?.video || "https://s3-figma-videos-production-sig.figma.com/video/TEAM/1272176544213014571/d0a0ff97fb545580aef00085d8f3d243e78a6b9c?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=POXiS-nfV2DqGsrLhgOhcqLcQtls2QowWSHk2YhlpxrdWE1ueKA40bcgjUD2dtNu1WUywnL8OgcsqW5GtuJ2aKfqcVy-DxzudAIY4CEbzvw4teYDVqi46DXmsfoC5094ybO-F~CJpW~NvHUt0oPUFkhOuiJPFypgZU0bl2Kqn3TYM9TyVQNyYV2CLI2~TG4CZnVf-EAH2INj5djFM7IVwkqqrilMe64308KfevIkdI4Q3scUwWECw71wMMG4JgLQbUCQE8PO~Annnbt3NOnOD0dHrSIN9yB~7bxCiLwk5xrn0bf8dn-iIyW0l6yhZmCOU1VU9B~IHTBT0d1Cpvm7Og__"}
+        src={
+          data?.video ||
+          "https://s3-figma-videos-production-sig.figma.com/video/TEAM/1272176544213014571/d0a0ff97fb545580aef00085d8f3d243e78a6b9c?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=POXiS-nfV2DqGsrLhgOhcqLcQtls2QowWSHk2YhlpxrdWE1ueKA40bcgjUD2dtNu1WUywnL8OgcsqW5GtuJ2aKfqcVy-DxzudAIY4CEbzvw4teYDVqi46DXmsfoC5094ybO-F~CJpW~NvHUt0oPUFkhOuiJPFypgZU0bl2Kqn3TYM9TyVQNyYV2CLI2~TG4CZnVf-EAH2INj5djFM7IVwkqqrilMe64308KfevIkdI4Q3scUwWECw71wMMG4JgLQbUCQE8PO~Annnbt3NOnOD0dHrSIN9yB~7bxCiLwk5xrn0bf8dn-iIyW0l6yhZmCOU1VU9B~IHTBT0d1Cpvm7Og__"
+        }
       />
       {/* <video src="URL_ADDRESS.youtube.com/watch?URL_ADDRESS.youtube.com/watch?56l9c" contURL_ADDRESS.youtube.com/watch?URL_ADDRESS.youtube.com/watch?56l9c" controlsURL_ADDRESS.youtube.com/watch?URL_ADDRESS.youtube.com/watch?56l9c" controls /> */}
       {/* <video src="URL_ADDRESS.youtube.com/watch?56l9c" controls /> */}
@@ -110,7 +113,7 @@ const MapLocation = () => {
   );
 };
 
-import { Media, MediaItem } from "@/api/endpoints/properties";
+import { Media, MediaItem } from "@/apiRequest/endpoints/properties";
 
 const Photos = ({ data }: { data: Media }) => {
   return (

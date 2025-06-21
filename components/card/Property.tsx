@@ -5,7 +5,7 @@ import { Text } from "../ui/Text";
 import { Divider } from "../ui/Divider";
 import { Icon } from "../ui/Icon";
 import UnlockAccessPopup from "../Modal/UnlockAccessPopup";
-import type { Property } from "@/api/endpoints/properties";
+import type { Property } from "@/apiRequest/endpoints/properties";
 import { useRouter } from "next/navigation";
 const Property = ({
   isBlur,

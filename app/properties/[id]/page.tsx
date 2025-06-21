@@ -41,12 +41,12 @@ import { CheckboxInput } from "@/components/ui/Checkbox";
 import PropertyOffcanvas from "@/components/OffCanvas/PropertyOffcanvas";
 import Overlay from "@/components/common/Overlay";
 import { useParams, useRouter } from "next/navigation";
-import api from "@/api/axios";
+import api from "@/apiRequest/axios";
 import {
   AreaExplore,
   propertiesApi,
   Property,
-} from "@/api/endpoints/properties";
+} from "@/apiRequest/endpoints/properties";
 
 const Page = () => {
   // const { propertiesPageData } = usePropertyPageData();
@@ -91,7 +91,9 @@ const Page = () => {
 
   return (
     <>
-      {activeTab && propertyDetails && <PropertyOffcanvas data={propertyDetails} />}
+      {activeTab && propertyDetails && (
+        <PropertyOffcanvas data={propertyDetails} />
+      )}
 
       {isOpenCanvas && <Overlay setAction={setIsOpenCanvas} />}
 
@@ -362,7 +364,9 @@ const Page = () => {
                         <Text variant={"card_title_small"}>Map</Text>
                       </div>
                     </div>
-                    {propertyDetails && <PropertyCoreDetails property={propertyDetails} />}
+                    {propertyDetails && (
+                      <PropertyCoreDetails property={propertyDetails} />
+                    )}
                   </div>
                 </div>
                 <ContentSection
@@ -632,7 +636,9 @@ const Landmarks = ({ landmarks }: { landmarks: any }) => {
         <div className="flex flex-col gap-5">
           {landmarks &&
             landmarks.length > 0 &&
-            landmarks.map((item: any, index: number) => <StationItem {...item} />)}
+            landmarks.map((item: any, index: number) => (
+              <StationItem {...item} />
+            ))}
         </div>
 
         <div className="bg-border h-full"></div>

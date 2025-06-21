@@ -1,5 +1,5 @@
-import { policiesApi } from "@/api/endpoints/policies";
-import { Policy, QueryParams } from "@/api/types";
+import { policiesApi } from "@/apiRequest/endpoints/policies";
+import { Policy, QueryParams } from "@/apiRequest/types";
 import { create } from "zustand";
 
 interface PolicyState {

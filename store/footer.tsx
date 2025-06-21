@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { footerApi } from "@/api/endpoints/footer"; // Adjust path if needed
-import { ApiResponse, Footer } from "@/api/types"; // Assuming this is the generic wrapper
+import { footerApi } from "@/apiRequest/endpoints/footer"; // Adjust path if needed
+import { ApiResponse, Footer } from "@/apiRequest/types"; // Assuming this is the generic wrapper
 
 interface FooterState {
   footer: Footer | null;
